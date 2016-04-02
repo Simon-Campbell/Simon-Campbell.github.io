@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Simon Campbell&amp;#039;s blog</title>
+    <description>a Software Engineering&amp;#039;s blog</description>
+    <link>http://imengineer.in/blog/blog/</link>
+    <atom:link href="http://imengineer.in/blog/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 02 Apr 2016 21:19:59 +1300</pubDate>
+    <lastBuildDate>Sat, 02 Apr 2016 21:19:59 +1300</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Testing XML Against XSD in C#/.NET</title>
+        <description>&lt;p&gt;In some software systems you are required to generate generate some XML output. Usually this XML output can be generated as a result of some serialising objects. The specification of the XML structure can either be very straightforward or complex for the inexperienced C#/.NET developer to implement. The straightforward specifications usually only require serializing some Plain Old CLR Object (POCO) whereas the other, more complex specifications may require additional C# class/field attributes or some custom serialisation layer. Either case should be tested because even the simplest serialization procedures can produce unexpected outputs.&lt;/p&gt;
+
+&lt;p&gt;If you are fortunate enough to have have XSD contract for how your XML should look then you can use the .NET framework to validate your XML documents against XSD. In order to get started with testing your outputs against an XSD you will need to create a Unit Test project in Visual Studio with a reference to System.Xml. Once you have created the project add a new unit test to the project with &lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt; statements for System.Xml and System.Xml.Schema.&lt;/p&gt;
+
+&lt;p&gt;In C#/.NET you can read an XML file using the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.xml.xmlreader(v=vs.110).aspx&quot;&gt;XmlReader&lt;/a&gt; class. This class can be used to read XML files from a stream or a URI string using the XmlReader.Create method. One of the optional overloads for this method is to take an &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.xml.xmlreadersettings(v=vs.110).aspx&quot;&gt;XmlReaderSettings&lt;/a&gt; instance. An XmlReaderSettings class allows for a validation type, validation options, validation schemas and an event handler to be set when any important validation events happen. This class is what will be used as the basis for testing XML against XSD. At the bottom of this post is an example of how the XmlReader class can be put to use.&lt;/p&gt;
+
+&lt;p&gt;The below example can be modified to fail tests on warnings instead of just errors. This can be done by simply modifying the following line of code in the event handler:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: plain; title: ; notranslate&quot; title=&quot;&quot;&gt;&amp;lt;br /&amp;gt;
+if (e.Severity == XmlSeverityType.Error)&amp;lt;br /&amp;gt;
+&lt;/pre&gt;
+
+&lt;p&gt;to be:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: plain; title: ; notranslate&quot; title=&quot;&quot;&gt;&amp;lt;br /&amp;gt;
+if (e.Severity == XmlSeverityType.Error || e.Severity == XmlSeverityType.Warning)&amp;lt;br /&amp;gt;
+&lt;/pre&gt;
+
+&lt;p&gt;If you are generating XML output against an XSD you probably should aim to have full compliance against the specification.&lt;/p&gt;
+
+&lt;pre class=&quot;brush: csharp; collapse: true; light: false; title: Example XSD Testing; toolbar: true; notranslate&quot; title=&quot;Example XSD Testing&quot;&gt;&amp;lt;br /&amp;gt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;&amp;lt;br /&amp;gt;
+using System.Xml;&amp;lt;br /&amp;gt;
+using System.Xml.Schema;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;namespace XsdBlogPost&amp;lt;br /&amp;gt;
+{&amp;lt;br /&amp;gt;
+    [TestClass]&amp;lt;br /&amp;gt;
+    public class TestXml&amp;lt;br /&amp;gt;
+    {&amp;lt;br /&amp;gt;
+        [TestMethod]&amp;lt;br /&amp;gt;
+        public void TestXmlMethod()&amp;lt;br /&amp;gt;
+        {&amp;lt;br /&amp;gt;
+            var settings = new XmlReaderSettings();&amp;lt;br /&amp;gt;
+            settings.ValidationType = ValidationType.Schema;&amp;lt;br /&amp;gt;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;&amp;lt;br /&amp;gt;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;&amp;lt;br /&amp;gt;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;            using (var xmlSchemaReader = XmlReader.Create(&amp;quot;CustomersOrders.xsd&amp;quot;))&amp;lt;br /&amp;gt;
+            {&amp;lt;br /&amp;gt;
+                var schemaSet = new XmlSchemaSet();&amp;lt;br /&amp;gt;
+                schemaSet.Add(null, xmlSchemaReader);&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;                settings.Schemas = schemaSet;&amp;lt;br /&amp;gt;
+                settings.ValidationEventHandler += (sender, e) =&amp;gt;&amp;lt;br /&amp;gt;
+                {&amp;lt;br /&amp;gt;
+                    if (e.Severity == XmlSeverityType.Error)&amp;lt;br /&amp;gt;
+                    {&amp;lt;br /&amp;gt;
+                        Assert.Fail(&amp;quot;Failed a test due to an XSD error.&amp;quot;);&amp;lt;br /&amp;gt;
+                    }&amp;lt;br /&amp;gt;
+                };&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;                var reader = XmlReader.Create(&amp;quot;CustomersOrders.xml&amp;quot;, settings);&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;                while (reader.Read()) ;&amp;lt;br /&amp;gt;
+            }&amp;lt;br /&amp;gt;
+        }&amp;lt;br /&amp;gt;
+    }&amp;lt;br /&amp;gt;
+}&amp;lt;br /&amp;gt;
+&lt;/pre&gt;
+
+&lt;p&gt;You can get the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/vstudio/bb675181(v=vs.100).aspx&quot;&gt;CustomersOrder.xsd file from Microsoft&lt;/a&gt; as well as the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/vstudio/bb387025(v=vs.100).aspx&quot;&gt;CustomersOrders.xml file&lt;/a&gt;. Try modifying the XML in CustomersOrder to be invalid based on what the XSD file specifies (e.g. change the tag to ).&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 07 Jul 2014 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</guid>
+        
+        <category>.net</category>
+        
+        <category>c#</category>
+        
+        <category>programming</category>
+        
+        <category>testing</category>
+        
+        <category>xml</category>
+        
+        <category>xsd</category>
+        
+        
+        <category>Development</category>
+        
+      </item>
+    
+      <item>
+        <title>Closures and Lambdas</title>
+        <description>&lt;p&gt;Over the past year I have been programming heavily in C#. This experience involved working on a few reasonably large projects and has let me get a good feel for lambda expressions and closures.&lt;/p&gt;
+
+&lt;p&gt;For those who do not know, a lambda expression is an anonymous function. Closures are functions where &lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;variables not defined in the function parameter-list but accessible in the environment where the function is defined. Lambda expressions in C# obviously define lambdas, but can also define closures. In saying this, it is important to note that &lt;strong&gt;closures are not lambdas.&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Prior to using lambda expressions in C# I had spent most of my time programming in Java and Pawn. Neither of these languages support lambda expressions and now when I write code in these languages it hurts. Trying to recreate the simplicity that lambdas provide is impossible and in Java there is a lot of noise in defining reusable functions. Reusable functions in Java are usually defined as Functors. The difference is made apparent in my Honours Project where it is necessary write code like this:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot; title=&quot;&quot;&gt;public class VoiceMethodFactory {
+    // VoiceMethodMap just works like any other map, I extract a &#39;VoiceMethod&#39; based
+    // on a string key (based on users speech-to-text) and execute it.
+    private Map&amp;lt;String, VoiceMethod&amp;gt; voiceMethods = new VoiceMethodMap();
+
+    private VoiceMethod sayUserLocation = new VoiceMethod() {
+        @Override
+        public void invoke(BlindAssistant assistant, Map&amp;lt;String, String&amp;gt; arguments) {
+            assistant.sayCurrentLocation();
+        }
+    };
+
+    private VoiceMethod stopNavigating = new VoiceMethod() {
+        @Override
+        public void invoke(BlindAssistant assistant, Map&amp;lt;String, String&amp;gt; arguments) {
+            assistant.navigateTo(null);
+        }
+    };
+
+    private VoiceMethodFactory() {
+        voiceMethods.put(&quot;where am I&quot;, sayUserLocation);
+        voiceMethods.put(&quot;stop navigating&quot;, stopNavigating);
+    }
+
+    public static VoiceMethodFactory createStandardFactory() {
+        return new VoiceMethodFactory();
+    }
+}
+
+/**
+ * Defines function that can be used to invoke voice methods (defined in another file)
+ */
+public interface VoiceMethod {
+    void invoke(BlindAssistant assistant, Map&amp;lt;String, String&amp;gt; arguments);
+}
+&lt;/pre&gt;
+
+&lt;p&gt;This method of doing things required that I define an additional interface and also define classes which implement it and provide the behaviour necessary. These additional classes contain a lot of boilerplate code and (usually) one out of five lines defines the difference. If this setup was defined in a language which supported lambdas, such as C# then I would be writing something like this:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: csharp; title: ; notranslate&quot; title=&quot;&quot;&gt;public class VoiceMethodFactory {
+    // Map changes to a Dictionary in C#
+    private Dictionary&amp;lt;String, Action&amp;lt;BlindAssistant, Dictionary&amp;lt;String, String&amp;gt;&amp;gt; voiceMethods = new VoiceMethodMap();
+
+    private VoiceMethodFactory() {
+        voiceMethods.put(&quot;where am I&quot;, (b, a) =&amp;gt; a.sayCurrentLocation());
+        voiceMethods.put(&quot;stop navigating&quot;, (b, a) =&amp;gt; a.navigateTo(null));
+    }
+
+    public static VoiceMethodFactory createStandardFactory() {
+        return new VoiceMethodFactory();
+    }
+}
+&lt;/pre&gt;
+
+&lt;p&gt;This is a lot simpler. In terms of line count (without comments) the C# example is 40% smaller than the Java example. I imagine the difference is much greater in my current code base which defines several more of these &lt;code class=&quot;highlighter-rouge&quot;&gt;VoiceMethod&lt;/code&gt;s. Using lambdas is much more concise and to the point and I could now even argue that my original reasons for the &lt;code class=&quot;highlighter-rouge&quot;&gt;VoiceMethodFactory&lt;/code&gt; are now void. The reason I created the factory was to move this anonymous class definition noise away from another part of my system.&lt;/p&gt;
+
+&lt;p&gt;Java 8 is going to &lt;a href=&quot;http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html&quot; title=&quot;Java 8 - Lambda Expressions&quot;&gt;support lambdas and closures as part of Project Lambda&lt;/a&gt;. It is unfortunate however that Android developers may not get to use lambda expressions in their Java code for a little while yet. This is because Android does not use the official Java implementation. Instead Android uses Apache Harmony, an open-source implementation of Java, due to &lt;a href=&quot;http://stackoverflow.com/questions/16921337/why-apache-harmony-or-how-to-use-java-8-on-android&quot; title=&quot;Why Apache Harmony on Android&quot;&gt;licensing issues&lt;/a&gt; between Sun and Google.&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 25 Aug 2013 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/development/honours%20project/2013/08/25/closures-and-lambdas.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/development/honours%20project/2013/08/25/closures-and-lambdas.html</guid>
+        
+        <category>.net</category>
+        
+        <category>android</category>
+        
+        <category>c#</category>
+        
+        <category>closures</category>
+        
+        <category>java</category>
+        
+        <category>lambdas</category>
+        
+        <category>noise</category>
+        
+        <category>programming</category>
+        
+        
+        <category>Development</category>
+        
+        <category>Honours Project</category>
+        
+      </item>
+    
+      <item>
+        <title>McDonald&amp;#8217;s Theory</title>
+        <description>&lt;p&gt;I came across &lt;a href=&quot;https://medium.com/what-i-learned-building/9216e1c9da7d&quot;&gt;an interesting theory&lt;/a&gt; named the McDonald’s theory. It is a trick that tries to motivate ideas in a group by first suggesting a bad idea. &lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;The theory sounds plausible because it would set a low bar of entry into a brainstorm.  Co-workers may gain the confidence to start suggesting their own ideas because “nothing I suggest can be &lt;/span&gt;&lt;em style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;that&lt;/em&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; bad”.&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;This trick does not address the root cause of the problem. That is, that people do not want to risk putting their professional image on the line to start brainstorming (i.e. risk sounding like idiots). We all want to excel at what we do so perhaps efforts should be focused on cultivating an environment where everybody feels like they are excelling. Unfortunately, cultivating such an environment may only be possible in the ideal world we don’t live in, but it should be tried for. There would likely be other benefits to such an environment such as improved morale– a sense of purpose driving employees work.&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;In regards to getting ideas to start: I think what will always matter is somebody needs to break the ice with &lt;em&gt;some&lt;/em&gt; idea (bad or good). If you really want somebody to do that, then the person you can rely on the most is &lt;strong&gt;YOU&lt;/strong&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 01 May 2013 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/jibber%20jabber/2013/05/01/mcdonalds-theory.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/jibber%20jabber/2013/05/01/mcdonalds-theory.html</guid>
+        
+        <category>ideas</category>
+        
+        <category>management</category>
+        
+        <category>project</category>
+        
+        <category>theory</category>
+        
+        <category>work</category>
+        
+        
+        <category>Jibber Jabber</category>
+        
+      </item>
+    
+      <item>
+        <title>Unit Testing Gotcha with Entity Framework</title>
+        <description>&lt;p&gt;I have been working with the &lt;a href=&quot;https://www.google.co.nz/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=1&amp;amp;cad=rja&amp;amp;ved=0CDUQFjAA&amp;amp;url=http%3A%2F%2Fmsdn.microsoft.com%2Fen-us%2Fdata%2Fef.aspx&amp;amp;ei=8CnMUP7nMa2jiAeC-oHYDA&amp;amp;usg=AFQjCNGnRYM3tghOlk7YE3qY8RyjXpulaQ&amp;amp;sig2=KnR4_5pyp6HCgG6AyjsqNg&amp;amp;bvm=bv.1355325884,d.aGc&quot;&gt;Entity Framework&lt;/a&gt; at work. It has been used to connect with a database for a RESTful &lt;a href=&quot;http://www.asp.net/web-api&quot;&gt;ASP.Net Web API&lt;/a&gt; service.&lt;/p&gt;
+
+&lt;p&gt;Testing the Web API has been interesting to learn about. Originally I decided to test this Web API using &lt;a href=&quot;http://www.fiddler2.com/fiddler2/&quot;&gt;Fiddler&lt;/a&gt; to do HTTP POSTs to selected URLs and then analyzing the results. It soon became apparent that this method was slow and error prone– making me opt for unit-testing.&lt;/p&gt;
+
+&lt;p&gt;I spent a good portion of the day writing the tests, fixing bugs as I found them. Fortunately, the API scope of the API was relatively small and writing most of the tests did not take too long. That is, until I encountered a weird side effect of the C# Entity Framework.&lt;/p&gt;
+
+&lt;p&gt;One of the API method tests that made a POST required the use of a database ObjectContextobject to check if the request actually updated the database entities that it should have. The test however was failing, I believe this was due a ObjectContext being created in the unit-test method and another being created in the method being tested. The two differentObjectContexts were out of sync even though they were attached to the same datastore.&lt;/p&gt;
+
+&lt;p&gt;The structure of the code that caused the problem was similar to this piece of skeleton code:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: csharp; title: ; notranslate&quot; title=&quot;&quot;&gt;class TestClass
+{
+    ObjectContext db;
+
+    [TestInitialize]
+    public void Setup()
+    {
+       db = new ObjectContextEntities();
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        db.Dispose();
+    }
+
+    [TestMethod]
+    public void TestPost()
+    {
+        // Add a new Entity to the Entities table,
+        // with a TimeOut of null.
+        Entity e = new Entity();
+        e.TimeIn = DateTime.Now;
+        e.TimeOut = null;
+        db.AddToEntities(e);
+
+        // Call a method which updates TimeOut for all entities to
+        // DateTime.Now
+        new PostingController().Post();
+
+        // TimeOut for each row in Entities should have been changed
+        // from NULL to not now
+        var q = from q in db.Entities select e;
+
+        foreach (var r in q)
+            Assert.IsTrue(r.TimeOut != null);
+    }
+}
+
+class PostingController() // Class under test
+{
+    public void Post()
+    {
+        var db = new ObjectContextEntities();
+        var q = from e in db.Entity select e;
+
+        foreach (var r in q)
+            q.TimeOut = DateTime.Now;
+
+        db.SaveChanges();
+        db.Dispose();
+    }
+}
+&lt;/pre&gt;
+
+&lt;p&gt;It appears that the Entity Framework tries to be “smart” and efficient which means that the update is not synchronized between the ObjectContexts. In order to work around this I was required to call the Refresh() method on the ObjectContext after the call to Post(), like so:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: csharp; title: ; notranslate&quot; title=&quot;&quot;&gt;db.Refresh(RefreshMode.StoreWins, db.Entities);
+&lt;/pre&gt;
+
+&lt;p&gt;I am not sure if this is the recommended way to work around this but it works and the test will pass as you expect. I will look into this more when I get back to the code at work. I will post any new findings or corrections.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 14 Dec 2012 00:00:00 +1300</pubDate>
+        <link>http://imengineer.in/blog/blog/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</guid>
+        
+        <category>c#</category>
+        
+        <category>entity framework</category>
+        
+        <category>linq</category>
+        
+        <category>programming</category>
+        
+        <category>sql</category>
+        
+        <category>testing</category>
+        
+        <category>unit testing</category>
+        
+        <category>webapi</category>
+        
+        
+        <category>Development</category>
+        
+      </item>
+    
+      <item>
+        <title>5 Years: What does it mean? Will it go on?</title>
+        <description>&lt;p&gt;Today marks &lt;a href=&quot;http://digg.com/news/gaming/San_Andreas_Multiplayer_%28SA:MP%29_Released&quot; target=&quot;_blank&quot;&gt;five years&lt;/a&gt; since littlewhitey’s SA:MP server was created. It was founded by a young man who had the alias of “littlewhitey” as SA:MP’s first server.&lt;/p&gt;
+
+&lt;p&gt;The server at the time of creation ran on a script simply named LVDM. This was a gamemode created by jax (SA:MP developer) and simply allowed players to freeroam around Las Venturas. It was very enjoyable but it started to get old due to it being a standard SA:MP gamemode, which was beginning to be hosted on almost every server and being surpassed by more technical edits.&lt;/p&gt;
+
+&lt;p&gt;Soon after the server was created, there was an edit to LVDM that was released to the public named LVDM~MG+LG. This script was created by Sintax and added features such as properties, spawn weapons and temporary saving to the server. The script had had RPG elements added to it and they were very succesful for the server, the players would join, build up their banks and mindlessly kill.&lt;/p&gt;
+
+&lt;p&gt;Mike, who was also a SA:MP developer took development under his wing when the default SA:MP administration tools were not enough for administrating a server with a 100 player average player count. You almost always had to wait in line, the server was constantly at max capacity of 100 due to it being one of a few official servers.&lt;/p&gt;
+
+&lt;p&gt;Development mainly occured with minor gameplay tweaks and behind the scenes administration tools; motivation for development was dying slowly. This was the time that I stepped up and offered to develop for the server, being a good e-friend of littlewhitey he had no problem with this. I wasn’t a confident developer, I started small and made edits to the existing script (nothing that interesting that I can recall)&lt;/p&gt;
+
+&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;a href=&quot;http://imgur.com/045Ub&quot; target=&quot;_blank&quot;&gt;&lt;img class=&quot;aligncenter&quot; alt=&quot;&quot; src=&quot;http://web.archive.org/web/20111228044129im_/http://i.imgur.com/045Ubs.png&quot; width=&quot;90&quot; height=&quot;90&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;http://imgur.com/Ujbrp&quot; target=&quot;_blank&quot;&gt;&lt;img class=&quot;aligncenter&quot; alt=&quot;&quot; src=&quot;http://web.archive.org/web/20111228044129im_/http://i.imgur.com/Ujbrps.png&quot; width=&quot;90&quot; height=&quot;90&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;http://imgur.com/UkBi2&quot; target=&quot;_blank&quot;&gt;&lt;img class=&quot;aligncenter&quot; alt=&quot;&quot; src=&quot;http://web.archive.org/web/20111228044129im_/http://i.imgur.com/UkBi2s.png&quot; width=&quot;90&quot; height=&quot;90&quot; /&gt;&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;After editing the script for what seems like a million times, I started to get fed up with it. It was becoming very difficult to update a script designed for 0.1 for the now released 0.2. The script seemed to be held together by sticky tape, one simple edit had a high probability of leading to catastrophic failure. I had an epiphany: I could rewrite this script from the ground up, code it more efficiently, add features while I was at it and learn a great deal from the process– it’d be a “gift” to littlewhitey for the fun service he’d provided for me and likely tens of thousands (possible exagerration?) of other individuals.&lt;/p&gt;
+
+&lt;p&gt;I scripted, and scripted, and scripted, and scripted. I experienced several nights turning into days, I’d become so attached to developing the script that it became a part of me. The script became something more concrete and was nearing completion. The feature list had expanded from something great to something even greater, the number of properties were increased, users could register, the gamemode employed stat-saving, spawn-weapons saved, gang territories were introduced, the gang system was expanded, the pirate ship changed from a simple money generator to a challenging mini-game of “Capture the Briefcase” and many other minor changes.&lt;/p&gt;
+
+&lt;p&gt;As the script neared completion I employed the help of Brandon to help get it done. He coined the name LW_LVDM for the script and helped tie up lose ends within the script to speed up development until finally &lt;strong&gt;LW_LVDM v2 was released on the 14th of July 2007&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The release of LW_LVDM v2 was a big milestone for me. It was my first major coding project ever completed. I’d created simple SA:MP scripts and dabbled with the generic hello worlds but never put in the time to make a full, working system. It helped me figure out what direction I want to take my life in, I found that it was a very influential project.&lt;/p&gt;
+
+&lt;p&gt;Now you know what it means to me.&lt;/p&gt;
+
+&lt;p&gt;In between now and then, the script has employed the skills of many scripters. They’ve all left a mark in the history of the server, so I’m sure it means &lt;strong&gt;at least&lt;/strong&gt; a little something to them. &lt;strong&gt;What does your time on littlewhitey’s mean to you?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The question “will it go on” or a variation of it has probably lingered in your mind. Well I have an answer for you, and that is: yes. The next version of LW_LVDM will infact be v3.0, I have been working on it in my spare time (with Sneaky) and a lot in my recent university break. A release date has been set internally so we have a goal to reach.&lt;/p&gt;
+
+&lt;p&gt;The script will not be a rewrite in the sense that it’s started from &lt;blank&gt;. It is a highly re-organized version of v2.0 where changed core systems have been re-organized in order to refresh them and to address problems within them. However, 3.0 is not simply a re-organized script new features have been added to the script and are continuing to be added.&lt;/blank&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Stay tuned.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;(Images thanks to Darius of SA:MP)&lt;/p&gt;
+</description>
+        <pubDate>Mon, 09 May 2011 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</guid>
+        
+        <category>birthday</category>
+        
+        <category>gaming</category>
+        
+        <category>littlewhiteys</category>
+        
+        <category>lw</category>
+        
+        <category>lw_lvdm</category>
+        
+        <category>pawn</category>
+        
+        <category>personal</category>
+        
+        <category>programming</category>
+        
+        
+        <category>Development</category>
+        
+        <category>Gaming</category>
+        
+      </item>
+    
+      <item>
+        <title>Perfect Dark 64</title>
+        <description>&lt;p&gt;You know those Microsoft Points (MSP) that are given away during promotions; those points that usually won’t buy you anything? Well today those random MSP have finally added up to something worthwhile– Perfect Dark 64.&lt;/p&gt;
+
+&lt;p&gt;I’ve always been meaning to purchase Perfect Dark 64 for my Xbox 360, however, I never got around to doing so. I didn’t have the time nor did I want to hassle around with purchasing MSP. The excess MSP usually accrued through a MSP card purchase means that I would’ve essentially been mini-banking with Microsoft; the kicker being that my money is not “universal” once deposited.&lt;/p&gt;
+
+&lt;p&gt;As soon as the game had installed I didn’t hesitate to start playing it. Once the game had finished loaded up I knew a mistake had not been made, the joys of gaming in my “tween” years were revived. The tunes were in-tact, the resolution was better than ever, the controller scheme had been updated and everything else was just as I remembered it (perfect?)&lt;/p&gt;
+
+&lt;p&gt;I started with the tutorial part of the game to refresh my memory; the Carrington Institute was a nice hit of nostalgia. Grinning from ear to ear at what seemed like a “steal”, I then decided to play the solo missions on the toughest difficulty. The game was a lot more difficult than I remembered here. I believe the difficulty was just a controller change and the fact that I’m not very accustomed to controller FPS.&lt;/p&gt;
+
+&lt;p&gt;Playing around on solo for a bit when I decided I needed to share my new found joy. I introduced my younger sisters to the game via multi-player. Local multi-player is what I’ve truly missed from the current generation of consoles, it’s something that needs to return.&lt;/p&gt;
+
+&lt;p&gt;I do not have a single Xbox 360 game that provides multi-player magic like Perfect Dark 64. The only game with FPS multi-player that I own on Xbox 360 is Borderlands. The multi-player in Borderlands is clearly just tacked in there; it depends on where players are in the story which usually means that both players do not get the same enjoyability.&lt;/p&gt;
+
+&lt;p&gt;After playing the game with my sisters for approximately 3 hours I had proven the awesomeness. My little brother who used to play the game religiously with a friend and I is about to relearn what it’s like to have fun &lt;strong&gt;local&lt;/strong&gt; multi-player gaming.&lt;/p&gt;
+
+&lt;p&gt;At a special price of 400 MSP, I highly recommend you purchase the game. You can get to the Marketplace page by &lt;a href=&quot;http://marketplace.xbox.com/en-US/Product/Perfect-Dark/66acd000-77fe-1000-9115-d802584109c2&quot;&gt;clicking this link.&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 18 Apr 2011 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/gaming/2011/04/18/perfect-dark-64.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/gaming/2011/04/18/perfect-dark-64.html</guid>
+        
+        <category>360</category>
+        
+        <category>arcade</category>
+        
+        <category>deal</category>
+        
+        <category>games</category>
+        
+        <category>gaming</category>
+        
+        <category>live</category>
+        
+        <category>n64</category>
+        
+        <category>rare</category>
+        
+        <category>review</category>
+        
+        <category>special</category>
+        
+        <category>xbox</category>
+        
+        
+        <category>Gaming</category>
+        
+      </item>
+    
+      <item>
+        <title>Enabling WebGL in Firefox 4</title>
+        <description>&lt;p&gt;If you go to &lt;a href=&quot;http://bodybrowser.googlelabs.com/&quot;&gt;Google Body&lt;/a&gt; in Firefox 4, do you get an error stating that WebGL is not initializing properly? If so then keep on reading and I’ll explain a very quick switch that you can toggle in order to access the Body Browser and other WebGL applications:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Fire up Firefox 4 and type “about:config” into your address bar then press Enter on your keyboard.&lt;/li&gt;
+  &lt;li&gt;You may get a &lt;strong&gt;warning about dragons.&lt;/strong&gt; Tell Firefox you are aware of them and that you’ll be careful by clicking the “I’ll be careful, I promise!” button.&lt;/li&gt;
+  &lt;li&gt;Type into the “Filter: box” below the address bar the word “webgl”. You should now see most (if not all) of the &lt;strong&gt;WebGL options&lt;/strong&gt; in Firefox 4.&lt;/li&gt;
+  &lt;li&gt;Scan the list for “webgl.force-enabled” under “Preference Name” (or type it in the filter, whichever is fastest for you), if the “Value” is set to false then right-click it and select “Toggle”; it should change to true.&lt;/li&gt;
+  &lt;li&gt;Re-open the &lt;a href=&quot;http://bodybrowser.googlelabs.com/&quot;&gt;Google Body&lt;/a&gt; page and it should be working&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now you can browse the anatomy of a human female or maybe you can view some other WebGL content. &lt;strong&gt;If you have problems with Firefox 4 after enabling this then you should disable it&lt;/strong&gt;; one would assume it’s in beta (since not enabled by default) or you may have actually &lt;strong&gt;awoken a dragon&lt;/strong&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 13 Apr 2011 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/www/2011/04/13/enabling-webgl-in-firefox-4.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/www/2011/04/13/enabling-webgl-in-firefox-4.html</guid>
+        
+        <category>body</category>
+        
+        <category>firefox 4</category>
+        
+        <category>fx4</category>
+        
+        <category>google</category>
+        
+        <category>tip</category>
+        
+        <category>webgl</category>
+        
+        
+        <category>WWW</category>
+        
+      </item>
+    
+      <item>
+        <title>End of Holidays</title>
+        <description>&lt;p&gt;I know I’m more than a month late, but I hope everyone had a very merry Christmas and a happy new year. I hope the rest of the year is filled with opportunities and good times for everyone.&lt;/p&gt;
+
+&lt;p&gt;My summer holidays are coming to an end. I’ve enjoyed the break from university but the lack of a routine is getting to me, even more so that my family and girlfriend have gotten back into their daily routines.&lt;/p&gt;
+
+&lt;p&gt;In light of this, I’ve thought to myself about what I can do for the next month of my holiday. I can’t go on doing things without a cause, that seems to me like a waste of time. I could be more productive, I could be building things and learning in anticipation of going back to university.&lt;/p&gt;
+
+&lt;p&gt;I thought that I’d create some sort of agenda for me to follow: something that will remind me to &lt;em&gt;get things done&lt;/em&gt;. As of right now, I seem to just be doing a lot of non-important things such as browsing the internet or screwing around with my &lt;a href=&quot;http://www.sonyericsson.com/cws/products/2.371/xperiax10&quot;&gt;XPERIA X10 Android phone&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It would be nice to work on some sort of project to be able to stick on my resumé for when I finish university, a project that would also further my learning in C#, .NET and give me more programming experience in general. That project is a Pawn IDE, simply named “PawnEditor”.&lt;/p&gt;
+
+&lt;p&gt;I’ve also started adding some improvements to &lt;a href=&quot;http://dev.seachimp.com/projects/lva2&quot; title=&quot;LVA&quot;&gt;LVA&lt;/a&gt; (a branch of LW_LVDM), I’m adding the ideas to LVA because LW_LVDM seems to be evolving into something different to what I envisioned. The first update to LVA will be a more friendly UI, those who have stumbled onto &lt;a href=&quot;http://twitter.com/simon2k6&quot; title=&quot;my Twitter page&quot;&gt;my Twitter page&lt;/a&gt; will have seen developments of that a couple of months ago.&lt;/p&gt;
+
+&lt;p&gt;Another thing I’d like to do is read in hopes of improving English literacy skills as I believe mine are starting to slip. Although I have quite a bit of spare time due to holidays, it still feels difficult to whip out an “&lt;em&gt;old-fashione&lt;/em&gt;d” book and start comfortably reading. I am currently attempting to read a novel named &lt;a href=&quot;http://en.wikipedia.org/wiki/Atlas_Shrugged&quot;&gt;Atlas Shrugged&lt;/a&gt; by &lt;a href=&quot;http://en.wikipedia.org/wiki/Ayn_Rand&quot;&gt;Ayn Rand&lt;/a&gt;, which I hope can be finished in good time.&lt;/p&gt;
+
+&lt;p&gt;Finally, it think it would be a good idea to post some Pawn tutorials. I believe that the best way of learning is to teach, therefore if I post up some Pawn tutorials it will also help me clarify and remember programming and Pawn concepts.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 04 Feb 2011 00:00:00 +1300</pubDate>
+        <link>http://imengineer.in/blog/blog/development/jibber%20jabber/2011/02/04/end-of-holidays.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/development/jibber%20jabber/2011/02/04/end-of-holidays.html</guid>
+        
+        <category>.net</category>
+        
+        <category>atlas shrugged</category>
+        
+        <category>c#</category>
+        
+        <category>holiday</category>
+        
+        <category>ideas</category>
+        
+        <category>lva</category>
+        
+        <category>murach</category>
+        
+        <category>pawn</category>
+        
+        <category>pawneditor</category>
+        
+        <category>programming</category>
+        
+        <category>project</category>
+        
+        <category>ramblings</category>
+        
+        <category>reading</category>
+        
+        <category>tutorial</category>
+        
+        
+        <category>Development</category>
+        
+        <category>Jibber Jabber</category>
+        
+      </item>
+    
+      <item>
+        <title>Almost One Year of Study Down</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/baby-study.png&quot;&gt;&lt;img class=&quot;size-medium wp-image-16 alignleft&quot; alt=&quot;Baby Studying&quot; src=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/baby-study-300x254.png&quot; width=&quot;300&quot; height=&quot;254&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The most important recurring schedule at this stage in my life is coming to it’s yearly break. That is my tertiary study. I was thinking about what I’ve learned about tertiary study and the “journey” it took me to get there.&lt;/p&gt;
+
+&lt;p&gt;I’ve always wanted to go to university for something, as a child it just looked like such an achievement to be able to do so. I stuck through till the end of my secondary education even if admittedly it was a very lazy last year. I done this so even if I didn’t feel like studying, I’d still have the option to someday when I decided to &lt;em&gt;grow up.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Well, my secondary education had come to an end and I hadn’t signed up to go to any university. The application process seemed daunting — there were loans, commitments, more study and general confusion about university applications to top it off. I couldn’t motivate myself to do all this while struggling to study for my end of year exams. &lt;em&gt;I wasn’t ready.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I decided I’d continue working at my current job (a Domino’s Pizza store). I asked my boss if I could become a full time worker and work 40 hours per week, however he stated that he would only be able to give me 30 to 35 hours per week. This seemed reasonable as there were limited hours to be shared at the time. In light of this information I accepted the offer and hoped that if someone were to leave then my hours would be bumped up, it seemed like the logical thing any loyal employer would do.&lt;/p&gt;
+
+&lt;p&gt;Over the next year there were several people who left the job or transferred to another store meaning that more hours had become available. As a worker being loyal to his employer I was hoping that I’d get loyalty in return, however that wasn’t the case. I didn’t get the extra hours I had hoped for, I had actually started to lose hours so the replacements could get more hours.&lt;/p&gt;
+
+&lt;p&gt;There wasn’t much I could do once I realised I wasn’t being valued as a worker, a human-being and was being disrespected. It seemed I was rather thought of as a tool to make money and not a person. The worst part of the recession was upon me — I couldn’t find a new job which meant I was stuck working there.&lt;/p&gt;
+
+&lt;p&gt;My income was not steady enough to move out from home and push my life ahead. I then made myself a basic plan to push my life ahead:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Hold Onto the Job:&lt;/strong&gt;&lt;br /&gt;
+It’s crap but it’s money in the hand. I can keep looking for another job while working but don’t simply drop it without another job to go to.&lt;/li&gt;
+  &lt;li&gt;**Go to University:&lt;br /&gt;
+**The chances of being employed and the amount of doors open to me will increase if I’m qualified. There will also be better doors available to me, doors that I’m interested in and doors that will make me happy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/waikato-uni-coa.gif&quot;&gt;&lt;img class=&quot;aligncenter size-full wp-image-15&quot; alt=&quot;Waikato University Logo&quot; src=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/waikato-uni-coa.gif&quot; width=&quot;196&quot; height=&quot;60&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I decided I’d study &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://eng.waikato.ac.nz/programmes/software/&quot;&gt;Software Engineering&lt;/a&gt; at the &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://www.waikato.ac.nz/&quot;&gt;University of Waikato&lt;/a&gt;. This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://sa-mp.com/&quot;&gt;San Andreas Multiplayer&lt;/a&gt; server named &lt;em&gt;&lt;a href=&quot;http://web.archive.org/web/20111228044129/http://forum.littlewhiteys.co.uk/&quot;&gt;littlewhitey’s SA:MP Server&lt;/a&gt;&lt;/em&gt; and learning about programming in a language named&lt;a href=&quot;http://web.archive.org/web/20111228044129/http://www.compuphase.com/pawn/&quot;&gt;Pawn&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The 8 papers that I chose for my first year of study were the following:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;ENEL111-10A:&lt;/strong&gt; Introduction to Electronics&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;COMP103-10A:&lt;/strong&gt; Introduction to Computer Science 1&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;STAT121-10A:&lt;/strong&gt; Introduction to Statistical Methods&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ENGG180-10A:&lt;/strong&gt; Fundamentals of Engineering&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ENMP102-10B:&lt;/strong&gt; Materials and Process Engineering&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;MATH101-10B:&lt;/strong&gt; Introduction to Calculus&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;MATH102-10B:&lt;/strong&gt; Introduction to Algebra&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;COMP104-10B:&lt;/strong&gt; Introduction to Computer Science 2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After taking action I had to wait until 2010. The year I started my tertiary study and put my life on a better path. I haven’t regretted my decision to take this action, it has presented some difficult hurdles but not anything that cannot be overcome.&lt;/p&gt;
+
+&lt;p&gt;In the next week I will complete my last week of my first year of this exciting journey. The last week of teaching will then be followed by a 3 week exam period which will require me to knuckle down (damn calculus) so I get a 100% pass rate.&lt;/p&gt;
+
+&lt;p&gt;The time I’ve had at university has allowed me to undertake my interesting perspectives of things. I hope to continue developing that perspective and be able to put it to a good use.&lt;/p&gt;
+
+&lt;p&gt;I’ll also have you know that I recently quit the job at Domino’s Pizza. It was becoming too difficult to study and work at a disrespectful place.  The kicker to this is that I got a call 3 days later to allow me to work at a new store opening in my home town. I’m looking forward to working at my new place of work: time will tell me how it works out.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 09 Oct 2010 00:00:00 +1300</pubDate>
+        <link>http://imengineer.in/blog/blog/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</guid>
+        
+        <category>2010</category>
+        
+        <category>bored</category>
+        
+        <category>personal</category>
+        
+        <category>programming</category>
+        
+        <category>rambling</category>
+        
+        <category>university</category>
+        
+        <category>work</category>
+        
+        
+        <category>Jibber Jabber</category>
+        
+      </item>
+    
+      <item>
+        <title>Avenged Sevenfold – Nightmare (Review)</title>
+        <description>&lt;div&gt;
+  &lt;figure style=&quot;width: 300px;&quot; class=&quot;wp-caption alignright&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;http://upload.wikimedia.org/wikipedia/en/d/df/Avenged_Sevenfold_-_Nightmare.png&quot; width=&quot;300&quot; height=&quot;300&quot; /&gt;&lt;figcaption class=&quot;wp-caption-text&quot;&gt;Avenged Sevenfold &amp;#8211; Nightmare&lt;/figcaption&gt;&lt;/figure&gt; 
+  
+  &lt;p&gt;
+    &lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;A new album by heavy metal band &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Avenged Sevenfold&quot; href=&quot;http://en.wikipedia.org/wiki/Avenged_Sevenfold&quot;&gt;Avenged Sevenfold&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; has been released on the 27th of July. The album is dedicated to their lost drummer and friend; &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;The Rev&quot; href=&quot;http://en.wikipedia.org/wiki/The_Rev&quot;&gt;The Rev&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;. &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Dream Theatre&quot; href=&quot;http://en.wikipedia.org/wiki/Dream_Theater&quot;&gt;Dream Theatre&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; drummer &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Mike Portnoy&quot; href=&quot;http://en.wikipedia.org/wiki/Mike_Portnoy&quot;&gt;Mike Portnoy&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; has assisted the band in completing the album in The Rev’s absence.&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’d like to write about a couple of songs from the album. The first being my favourite song from the album &lt;strong&gt;Save Me&lt;/strong&gt;. This song progresses through a variety of different stages. The vocals, guitar and drumming are all very passionately composed together. This song is a 10 minute wonder and it’s just one of those songs I find myself uncontrollably turning on when I crank on the iPod.&lt;/p&gt;
+
+&lt;p&gt;The second song titled &lt;strong&gt;So Far Away&lt;/strong&gt; may well be my second favourite song on the album. This song contains &lt;a href=&quot;http://en.wikipedia.org/wiki/Synyster_Gates&quot; title=&quot;Synyster Gates&quot;&gt;Synyster Gates&lt;/a&gt;‘ (Lead Guitarist) first ever written lyrics. The song is relatively slow compared to the rest of the album. It starts off with only a singer and guitarist playing then finishes on a more epic note with the rest of the band joining in. The lyrics have been very passionately conceived and are straight to the point.&lt;/p&gt;
+
+&lt;p&gt;The rest of the album is also brilliant and well worth listening to. I realize that this isn’t everyone’s type of music but I think there should at least be something on the album that you find interesting.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 11 Aug 2010 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/blog/blog/music/2010/08/11/avenged-sevenfold-nightmare-review.html</link>
+        <guid isPermaLink="true">http://imengineer.in/blog/blog/music/2010/08/11/avenged-sevenfold-nightmare-review.html</guid>
+        
+        <category>album</category>
+        
+        <category>avenged sevenfold</category>
+        
+        <category>heavy metal</category>
+        
+        <category>metal</category>
+        
+        <category>music</category>
+        
+        <category>review</category>
+        
+        
+        <category>Music</category>
+        
+      </item>
+    
+  </channel>
+</rss>
