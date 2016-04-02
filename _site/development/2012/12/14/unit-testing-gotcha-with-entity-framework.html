@@ -72,65 +72,63 @@
 
 <p>The structure of the code that caused the problem was similar to this piece of skeleton code:</p>
 
-<pre class="brush: csharp; title: ; notranslate" title="">class TestClass
-{
-    ObjectContext db;
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">class</span> <span class="nc">TestClass</span>
+<span class="p">{</span>
+    <span class="n">ObjectContext</span> <span class="n">db</span><span class="p">;</span>
 
-    [TestInitialize]
-    public void Setup()
-    {
-       db = new ObjectContextEntities();
-    }
+    <span class="p">[</span><span class="n">TestInitialize</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Setup</span><span class="p">()</span>
+    <span class="p">{</span>
+       <span class="n">db</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectContextEntities</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    [TestCleanup]
-    public void Cleanup()
-    {
-        db.Dispose();
-    }
+    <span class="p">[</span><span class="n">TestCleanup</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Cleanup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    [TestMethod]
-    public void TestPost()
-    {
-        // Add a new Entity to the Entities table,
-        // with a TimeOut of null.
-        Entity e = new Entity();
-        e.TimeIn = DateTime.Now;
-        e.TimeOut = null;
-        db.AddToEntities(e);
+    <span class="p">[</span><span class="n">TestMethod</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">TestPost</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// Add a new Entity to the Entities table,
+</span>        <span class="c1">// with a TimeOut of null.
+</span>        <span class="n">Entity</span> <span class="n">e</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Entity</span><span class="p">();</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">TimeIn</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">AddToEntities</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
 
-        // Call a method which updates TimeOut for all entities to
-        // DateTime.Now
-        new PostingController().Post();
+        <span class="c1">// Call a method which updates TimeOut for all entities to
+</span>        <span class="c1">// DateTime.Now
+</span>        <span class="k">new</span> <span class="nf">PostingController</span><span class="p">().</span><span class="nf">Post</span><span class="p">();</span>
 
-        // TimeOut for each row in Entities should have been changed
-        // from NULL to not now
-        var q = from q in db.Entities select e;
+        <span class="c1">// TimeOut for each row in Entities should have been changed
+</span>        <span class="c1">// from NULL to not now
+</span>        <span class="n">var</span> <span class="n">q</span> <span class="p">=</span> <span class="n">from</span> <span class="n">q</span> <span class="k">in</span> <span class="n">db</span><span class="p">.</span><span class="n">Entities</span> <span class="n">select</span> <span class="n">e</span><span class="p">;</span>
 
-        foreach (var r in q)
-            Assert.IsTrue(r.TimeOut != null);
-    }
-}
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">r</span> <span class="k">in</span> <span class="n">q</span><span class="p">)</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="nf">IsTrue</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">!=</span> <span class="k">null</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-class PostingController() // Class under test
-{
-    public void Post()
-    {
-        var db = new ObjectContextEntities();
-        var q = from e in db.Entity select e;
+<span class="k">class</span> <span class="nc">PostingController</span><span class="p">()</span> <span class="c1">// Class under test
+</span><span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">db</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectContextEntities</span><span class="p">();</span>
+        <span class="n">var</span> <span class="n">q</span> <span class="p">=</span> <span class="n">from</span> <span class="n">e</span> <span class="k">in</span> <span class="n">db</span><span class="p">.</span><span class="n">Entity</span> <span class="n">select</span> <span class="n">e</span><span class="p">;</span>
 
-        foreach (var r in q)
-            q.TimeOut = DateTime.Now;
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">r</span> <span class="k">in</span> <span class="n">q</span><span class="p">)</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
 
-        db.SaveChanges();
-        db.Dispose();
-    }
-}
-</pre>
+        <span class="n">db</span><span class="p">.</span><span class="nf">SaveChanges</span><span class="p">();</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>It appears that the Entity Framework tries to be “smart” and efficient which means that the update is not synchronized between the ObjectContexts. In order to work around this I was required to call the Refresh() method on the ObjectContext after the call to Post(), like so:</p>
 
-<pre class="brush: csharp; title: ; notranslate" title="">db.Refresh(RefreshMode.StoreWins, db.Entities);
-</pre>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">db</span><span class="p">.</span><span class="nf">Refresh</span><span class="p">(</span><span class="n">RefreshMode</span><span class="p">.</span><span class="n">StoreWins</span><span class="p">,</span> <span class="n">db</span><span class="p">.</span><span class="n">Entities</span><span class="p">);</span></code></pre></figure>
 
 <p>I am not sure if this is the recommended way to work around this but it works and the test will pass as you expect. I will look into this more when I get back to the code at work. I will post any new findings or corrections.</p>
 

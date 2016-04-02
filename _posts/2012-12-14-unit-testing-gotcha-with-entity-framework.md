@@ -24,7 +24,8 @@ One of the API method tests that made a POST required the use of a database Obj
 
 The structure of the code that caused the problem was similar to this piece of skeleton code:
 
-<pre class="brush: csharp; title: ; notranslate" title="">class TestClass
+{% highlight csharp %}
+class TestClass
 {
     ObjectContext db;
 
@@ -77,12 +78,13 @@ class PostingController() // Class under test
         db.Dispose();
     }
 }
-</pre>
+{% endhighlight %} 
 
 It appears that the Entity Framework tries to be &#8220;smart&#8221; and efficient which means that the update is not synchronized between the ObjectContexts. In order to work around this I was required to call the Refresh() method on the ObjectContext after the call to Post(), like so:
 
-<pre class="brush: csharp; title: ; notranslate" title="">db.Refresh(RefreshMode.StoreWins, db.Entities);
-</pre>
+{% highlight csharp %}
+db.Refresh(RefreshMode.StoreWins, db.Entities);
+{% endhighlight %} 
 
 I am not sure if this is the recommended way to work around this but it works and the test will pass as you expect. I will look into this more when I get back to the code at work. I will post any new findings or corrections.
 
