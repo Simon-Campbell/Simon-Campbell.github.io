@@ -1,3 +1,11 @@
 url: http://imengineer.in/blog
 name: 'i&#039;mEngineerin&#039;'
-description: 'a Software Engineering student&#039;s blog'
+description: 'a Software Engineering&#039;s blog'
+title: 'Simon Campbell&#039;s blog'
+email: simon.s.campbell@gmail.com
+baseurl: "/blog"
+twitter_username: simon2k6
+github_username:  Simon-Campbell
+
+# Build settings
+markdown: kramdown
