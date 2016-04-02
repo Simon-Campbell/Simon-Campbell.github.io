@@ -36,6 +36,6 @@ Any views expressed on this blog are mine alone, and not the views of my employe
   * Android mobile development,
   * Software development process,
   * Software design,
-  * C#, .NET,
+  * F#, C#, .NET,
   * Java,
   * Computer vision and augmented reality
