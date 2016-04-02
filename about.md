@@ -20,7 +20,7 @@ I am a student studying Software Engineering at the University of Waikato. I aim
       <a href="https://bitbucket.org/sscampbell">BitBucket (sscampbell)</a>
     </li>
     <li>
-      <a href="https://github.com/simon2k6/">GitHub (simon2k6)</a>
+      <a href="https://github.com/Simon-Campbell/">GitHub (Simon-Campbell)</a>
     </li>
   </ul>
 </div>
@@ -28,7 +28,7 @@ I am a student studying Software Engineering at the University of Waikato. I aim
 ### Development Interests
 
   * Android mobile development,
-  * Software development process
+  * Software development process,
   * Software design,
   * C#, .NET,
   * Java,
