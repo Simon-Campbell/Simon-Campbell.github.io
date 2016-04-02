@@ -68,59 +68,57 @@
 
 <p>Prior to using lambda expressions in C# I had spent most of my time programming in Java and Pawn. Neither of these languages support lambda expressions and now when I write code in these languages it hurts. Trying to recreate the simplicity that lambdas provide is impossible and in Java there is a lot of noise in defining reusable functions. Reusable functions in Java are usually defined as Functors. The difference is made apparent in my Honours Project where it is necessary write code like this:</p>
 
-<pre class="brush: java; title: ; notranslate" title="">public class VoiceMethodFactory {
-    // VoiceMethodMap just works like any other map, I extract a 'VoiceMethod' based
-    // on a string key (based on users speech-to-text) and execute it.
-    private Map&lt;String, VoiceMethod&gt; voiceMethods = new VoiceMethodMap();
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">VoiceMethodFactory</span> <span class="o">{</span>
+    <span class="c1">// VoiceMethodMap just works like any other map, I extract a 'VoiceMethod' based</span>
+    <span class="c1">// on a string key (based on users speech-to-text) and execute it.</span>
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">VoiceMethod</span><span class="o">&gt;</span> <span class="n">voiceMethods</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethodMap</span><span class="o">();</span>
 
-    private VoiceMethod sayUserLocation = new VoiceMethod() {
-        @Override
-        public void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments) {
-            assistant.sayCurrentLocation();
-        }
-    };
+    <span class="kd">private</span> <span class="n">VoiceMethod</span> <span class="n">sayUserLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethod</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">assistant</span><span class="o">.</span><span class="na">sayCurrentLocation</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
 
-    private VoiceMethod stopNavigating = new VoiceMethod() {
-        @Override
-        public void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments) {
-            assistant.navigateTo(null);
-        }
-    };
+    <span class="kd">private</span> <span class="n">VoiceMethod</span> <span class="n">stopNavigating</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethod</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">assistant</span><span class="o">.</span><span class="na">navigateTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
 
-    private VoiceMethodFactory() {
-        voiceMethods.put("where am I", sayUserLocation);
-        voiceMethods.put("stop navigating", stopNavigating);
-    }
+    <span class="kd">private</span> <span class="n">VoiceMethodFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">voiceMethods</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"where am I"</span><span class="o">,</span> <span class="n">sayUserLocation</span><span class="o">);</span>
+        <span class="n">voiceMethods</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"stop navigating"</span><span class="o">,</span> <span class="n">stopNavigating</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public static VoiceMethodFactory createStandardFactory() {
-        return new VoiceMethodFactory();
-    }
-}
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">VoiceMethodFactory</span> <span class="n">createStandardFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">VoiceMethodFactory</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-/**
+<span class="cm">/**
  * Defines function that can be used to invoke voice methods (defined in another file)
- */
-public interface VoiceMethod {
-    void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments);
-}
-</pre>
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">VoiceMethod</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
 
 <p>This method of doing things required that I define an additional interface and also define classes which implement it and provide the behaviour necessary. These additional classes contain a lot of boilerplate code and (usually) one out of five lines defines the difference. If this setup was defined in a language which supported lambdas, such as C# then I would be writing something like this:</p>
 
-<pre class="brush: csharp; title: ; notranslate" title="">public class VoiceMethodFactory {
-    // Map changes to a Dictionary in C#
-    private Dictionary&lt;String, Action&lt;BlindAssistant, Dictionary&lt;String, String&gt;&gt; voiceMethods = new VoiceMethodMap();
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">VoiceMethodFactory</span> <span class="p">{</span>
+    <span class="c1">// Map changes to a Dictionary in C#
+</span>    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">BlindAssistant</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;&gt;</span> <span class="n">voiceMethods</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">VoiceMethodMap</span><span class="p">();</span>
 
-    private VoiceMethodFactory() {
-        voiceMethods.put("where am I", (b, a) =&gt; a.sayCurrentLocation());
-        voiceMethods.put("stop navigating", (b, a) =&gt; a.navigateTo(null));
-    }
+    <span class="k">private</span> <span class="nf">VoiceMethodFactory</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">voiceMethods</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s">"where am I"</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="nf">sayCurrentLocation</span><span class="p">());</span>
+        <span class="n">voiceMethods</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s">"stop navigating"</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="nf">navigateTo</span><span class="p">(</span><span class="k">null</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    public static VoiceMethodFactory createStandardFactory() {
-        return new VoiceMethodFactory();
-    }
-}
-</pre>
+    <span class="k">public</span> <span class="k">static</span> <span class="n">VoiceMethodFactory</span> <span class="nf">createStandardFactory</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">VoiceMethodFactory</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>This is a lot simpler. In terms of line count (without comments) the C# example is 40% smaller than the Java example. I imagine the difference is much greater in my current code base which defines several more of these <code class="highlighter-rouge">VoiceMethod</code>s. Using lambdas is much more concise and to the point and I could now even argue that my original reasons for the <code class="highlighter-rouge">VoiceMethodFactory</code> are now void. The reason I created the factory was to move this anonymous class definition noise away from another part of my system.</p>
 

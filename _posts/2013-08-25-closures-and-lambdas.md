@@ -21,21 +21,22 @@ For those who do not know, a lambda expression is an anonymous function. Closu
 
 Prior to using lambda expressions in C# I had spent most of my time programming in Java and Pawn. Neither of these languages support lambda expressions and now when I write code in these languages it hurts. Trying to recreate the simplicity that lambdas provide is impossible and in Java there is a lot of noise in defining reusable functions. Reusable functions in Java are usually defined as Functors. The difference is made apparent in my Honours Project where it is necessary write code like this:
 
-<pre class="brush: java; title: ; notranslate" title="">public class VoiceMethodFactory {
+{% highlight java %}
+public class VoiceMethodFactory {
     // VoiceMethodMap just works like any other map, I extract a 'VoiceMethod' based
     // on a string key (based on users speech-to-text) and execute it.
-    private Map&lt;String, VoiceMethod&gt; voiceMethods = new VoiceMethodMap();
+    private Map<String, VoiceMethod> voiceMethods = new VoiceMethodMap();
 
     private VoiceMethod sayUserLocation = new VoiceMethod() {
         @Override
-        public void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments) {
+        public void invoke(BlindAssistant assistant, Map<String, String> arguments) {
             assistant.sayCurrentLocation();
         }
     };
 
     private VoiceMethod stopNavigating = new VoiceMethod() {
         @Override
-        public void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments) {
+        public void invoke(BlindAssistant assistant, Map<String, String> arguments) {
             assistant.navigateTo(null);
         }
     };
@@ -54,26 +55,27 @@ Prior to using lambda expressions in C# I had spent most of my time programming 
  * Defines function that can be used to invoke voice methods (defined in another file)
  */
 public interface VoiceMethod {
-    void invoke(BlindAssistant assistant, Map&lt;String, String&gt; arguments);
+    void invoke(BlindAssistant assistant, Map<String, String> arguments);
 }
-</pre>
+{% endhighlight %}
 
 This method of doing things required that I define an additional interface and also define classes which implement it and provide the behaviour necessary. These additional classes contain a lot of boilerplate code and (usually) one out of five lines defines the difference. If this setup was defined in a language which supported lambdas, such as C# then I would be writing something like this:
 
-<pre class="brush: csharp; title: ; notranslate" title="">public class VoiceMethodFactory {
+{% highlight csharp %}
+public class VoiceMethodFactory {
     // Map changes to a Dictionary in C#
-    private Dictionary&lt;String, Action&lt;BlindAssistant, Dictionary&lt;String, String&gt;&gt; voiceMethods = new VoiceMethodMap();
+    private Dictionary<String, Action<BlindAssistant, Dictionary<String, String>> voiceMethods = new VoiceMethodMap();
 
     private VoiceMethodFactory() {
-        voiceMethods.put("where am I", (b, a) =&gt; a.sayCurrentLocation());
-        voiceMethods.put("stop navigating", (b, a) =&gt; a.navigateTo(null));
+        voiceMethods.put("where am I", (b, a) => a.sayCurrentLocation());
+        voiceMethods.put("stop navigating", (b, a) => a.navigateTo(null));
     }
 
     public static VoiceMethodFactory createStandardFactory() {
         return new VoiceMethodFactory();
     }
 }
-</pre>
+{% endhighlight %}
 
 This is a lot simpler. In terms of line count (without comments) the C# example is 40% smaller than the Java example. I imagine the difference is much greater in my current code base which defines several more of these `VoiceMethod`s. Using lambdas is much more concise and to the point and I could now even argue that my original reasons for the `VoiceMethodFactory` are now void. The reason I created the factory was to move this anonymous class definition noise away from another part of my system.
 
