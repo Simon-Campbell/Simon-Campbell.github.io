@@ -2,7 +2,6 @@
 title: Avenged Sevenfold – Nightmare (Review)
 author: Simon Campbell
 layout: post
-permalink: /?p=10
 categories:
   - Music
 tags:

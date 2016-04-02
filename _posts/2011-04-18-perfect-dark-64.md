@@ -2,7 +2,6 @@
 title: Perfect Dark 64
 author: Simon Campbell
 layout: post
-permalink: /?p=22
 categories:
   - Gaming
 tags:

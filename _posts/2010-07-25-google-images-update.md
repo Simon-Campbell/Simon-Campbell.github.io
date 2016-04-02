@@ -2,7 +2,6 @@
 title: Google Images Update
 author: Simon Campbell
 layout: post
-permalink: /?p=4
 categories:
   - WWW
 tags:

@@ -2,7 +2,6 @@
 title: 'McDonald&#8217;s Theory'
 author: Simon Campbell
 layout: post
-permalink: /?p=47
 categories:
   - Jibber Jabber
 tags:

@@ -2,7 +2,6 @@
 title: 'Testing XML Against XSD in C#/.NET'
 author: Simon Campbell
 layout: post
-permalink: /?p=88
 categories:
   - Development
 tags:

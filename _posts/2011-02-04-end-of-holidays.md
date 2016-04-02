@@ -2,7 +2,6 @@
 title: End of Holidays
 author: Simon Campbell
 layout: post
-permalink: /?p=18
 categories:
   - Development
   - Jibber Jabber

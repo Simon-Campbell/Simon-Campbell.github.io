@@ -2,7 +2,6 @@
 title: '5 Years: What does it mean? Will it go on?'
 author: Simon Campbell
 layout: post
-permalink: /?p=24
 categories:
   - Development
   - Gaming

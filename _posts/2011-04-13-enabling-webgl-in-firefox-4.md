@@ -2,7 +2,6 @@
 title: Enabling WebGL in Firefox 4
 author: Simon Campbell
 layout: post
-permalink: /?p=20
 categories:
   - WWW
 tags:

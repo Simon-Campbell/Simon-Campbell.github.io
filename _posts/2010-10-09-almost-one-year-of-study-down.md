@@ -2,7 +2,6 @@
 title: Almost One Year of Study Down
 author: Simon Campbell
 layout: post
-permalink: /?p=14
 categories:
   - Jibber Jabber
 tags:

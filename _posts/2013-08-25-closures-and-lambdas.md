@@ -2,7 +2,6 @@
 title: Closures and Lambdas
 author: Simon Campbell
 layout: post
-permalink: /?p=63
 categories:
   - Development
   - Honours Project

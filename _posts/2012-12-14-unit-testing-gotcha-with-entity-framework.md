@@ -2,7 +2,6 @@
 title: Unit Testing Gotcha with Entity Framework
 author: Simon Campbell
 layout: post
-permalink: /?p=32
 categories:
   - Development
 tags:
