@@ -5,8 +5,8 @@
     <description>Primarily a blog about software development</description>
     <link>http://imengineer.in/blog/</link>
     <atom:link href="http://imengineer.in/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Apr 2016 09:13:41 +1200</pubDate>
-    <lastBuildDate>Sun, 03 Apr 2016 09:13:41 +1200</lastBuildDate>
+    <pubDate>Sun, 03 Apr 2016 09:19:19 +1200</pubDate>
+    <lastBuildDate>Sun, 03 Apr 2016 09:19:19 +1200</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -512,7 +512,7 @@
     
       <item>
         <title>Almost One Year of Study Down</title>
-        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://imengineer.in/blog/assets/img/baby-study.png&quot; alt=&quot;Baby Studying&quot; /&gt;&lt;/p&gt;
+        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;/assets/img/baby-study.png&quot; alt=&quot;Baby Studying&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The most important recurring schedule at this stage in my life is coming to it’s yearly break. That is my tertiary study. I was thinking about what I’ve learned about tertiary study and the “journey” it took me to get there.&lt;/p&gt;
 
@@ -535,7 +535,7 @@ It’s crap but it’s money in the hand. I can keep looking for another job whi
 The chances of being employed and the amount of doors open to me will increase if I’m qualified. There will also be better doors available to me, doors that I’m interested in and doors that will make me happy.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://imengineer.in/blog/assets/img/waikato-uni-coa.gif&quot; alt=&quot;Waikato University Logo&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;/assets/img/waikato-uni-coa.gif&quot; alt=&quot;Waikato University Logo&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I decided I’d study &lt;a href=&quot;http://eng.waikato.ac.nz/programmes/software/&quot;&gt;Software Engineering&lt;/a&gt; at the &lt;a href=&quot;http://www.waikato.ac.nz/&quot;&gt;University of Waikato&lt;/a&gt;. This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a &lt;a href=&quot;http://sa-mp.com/&quot;&gt;San Andreas Multiplayer&lt;/a&gt; server named &lt;em&gt;&lt;a href=&quot;http://forum.littlewhiteys.co.uk/&quot;&gt;littlewhitey’s SA:MP Server&lt;/a&gt;&lt;/em&gt; and learning about programming in a language named&lt;a href=&quot;http://www.compuphase.com/pawn/&quot;&gt;Pawn&lt;/a&gt;.&lt;/p&gt;
 

@@ -14,7 +14,7 @@ tags:
   - work
 ---
 {:.center}
-![Baby Studying]({{site.url}}/assets/img/baby-study.png)
+![Baby Studying]({{site.baseurl}}/assets/img/baby-study.png)
 
 The most important recurring schedule at this stage in my life is coming to it's yearly break. That is my tertiary study. I was thinking about what I've learned about tertiary study and the “journey” it took me to get there.
 
@@ -36,7 +36,7 @@ My income was not steady enough to move out from home and push my life ahead. I 
     The chances of being employed and the amount of doors open to me will increase if I'm qualified. There will also be better doors available to me, doors that I'm interested in and doors that will make me happy.
 
 {:.center}
-![Waikato University Logo]({{site.url}}/assets/img/waikato-uni-coa.gif)
+![Waikato University Logo]({{site.baseurl}}/assets/img/waikato-uni-coa.gif)
 
 I decided I'd study [Software Engineering](http://eng.waikato.ac.nz/programmes/software/) at the [University of Waikato](http://www.waikato.ac.nz/). This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a [San Andreas Multiplayer](http://sa-mp.com/) server named *[littlewhitey's SA:MP Server](http://forum.littlewhiteys.co.uk/)* and learning about programming in a language named[Pawn](http://www.compuphase.com/pawn/).
 
