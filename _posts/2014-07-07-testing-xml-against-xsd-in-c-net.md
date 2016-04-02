@@ -20,54 +20,54 @@ In C#/.NET you can read an XML file using the [XmlReader][1] class. This class c
 
 The below example can be modified to fail tests on warnings instead of just errors. This can be done by simply modifying the following line of code in the event handler:
 
-<pre class="brush: plain; title: ; notranslate" title="">&lt;br /&gt;
-if (e.Severity == XmlSeverityType.Error)&lt;br /&gt;
-</pre>
+{% highlight csharp %}
+if (e.Severity == XmlSeverityType.Error)
+{% endhighlight %}
 
 to be:
 
-<pre class="brush: plain; title: ; notranslate" title="">&lt;br /&gt;
-if (e.Severity == XmlSeverityType.Error || e.Severity == XmlSeverityType.Warning)&lt;br /&gt;
-</pre>
+{% highlight csharp %}
+if (e.Severity == XmlSeverityType.Error || e.Severity == XmlSeverityType.Warning)
+{% endhighlight %}
 
 If you are generating XML output against an XSD you probably should aim to have full compliance against the specification.
 
-<pre class="brush: csharp; collapse: true; light: false; title: Example XSD Testing; toolbar: true; notranslate" title="Example XSD Testing">&lt;br /&gt;
-using Microsoft.VisualStudio.TestTools.UnitTesting;&lt;br /&gt;
-using System.Xml;&lt;br /&gt;
-using System.Xml.Schema;&lt;/p&gt;
-&lt;p&gt;namespace XsdBlogPost&lt;br /&gt;
-{&lt;br /&gt;
-    [TestClass]&lt;br /&gt;
-    public class TestXml&lt;br /&gt;
-    {&lt;br /&gt;
-        [TestMethod]&lt;br /&gt;
-        public void TestXmlMethod()&lt;br /&gt;
-        {&lt;br /&gt;
-            var settings = new XmlReaderSettings();&lt;br /&gt;
-            settings.ValidationType = ValidationType.Schema;&lt;br /&gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;&lt;br /&gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;&lt;br /&gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;&lt;/p&gt;
-&lt;p&gt;            using (var xmlSchemaReader = XmlReader.Create(&quot;CustomersOrders.xsd&quot;))&lt;br /&gt;
-            {&lt;br /&gt;
-                var schemaSet = new XmlSchemaSet();&lt;br /&gt;
-                schemaSet.Add(null, xmlSchemaReader);&lt;/p&gt;
-&lt;p&gt;                settings.Schemas = schemaSet;&lt;br /&gt;
-                settings.ValidationEventHandler += (sender, e) =&gt;&lt;br /&gt;
-                {&lt;br /&gt;
-                    if (e.Severity == XmlSeverityType.Error)&lt;br /&gt;
-                    {&lt;br /&gt;
-                        Assert.Fail(&quot;Failed a test due to an XSD error.&quot;);&lt;br /&gt;
-                    }&lt;br /&gt;
-                };&lt;/p&gt;
-&lt;p&gt;                var reader = XmlReader.Create(&quot;CustomersOrders.xml&quot;, settings);&lt;/p&gt;
-&lt;p&gt;                while (reader.Read()) ;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-}&lt;br /&gt;
-</pre>
+{% highlight csharp %}
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Xml;
+using System.Xml.Schema;
+namespace XsdBlogPost
+{
+    [TestClass]
+    public class TestXml
+    {
+        [TestMethod]
+        public void TestXmlMethod()
+        {
+            var settings = new XmlReaderSettings();
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+            using (var xmlSchemaReader = XmlReader.Create("CustomersOrders.xsd"))
+            {
+                var schemaSet = new XmlSchemaSet();
+                schemaSet.Add(null, xmlSchemaReader);
+                settings.Schemas = schemaSet;
+                settings.ValidationEventHandler += (sender, e) =>
+                {
+                    if (e.Severity == XmlSeverityType.Error)
+                    {
+                        Assert.Fail("Failed a test due to an XSD error.");
+                    }
+                };
+                var reader = XmlReader.Create("CustomersOrders.xml", settings);
+                while (reader.Read()) ;
+            }
+        }
+    }
+}
+{% endhighlight %}
 
 You can get the [CustomersOrder.xsd file from Microsoft][3] as well as the [CustomersOrders.xml file][4]. Try modifying the XML in CustomersOrder to be invalid based on what the XSD file specifies (e.g. change the tag to ).
 

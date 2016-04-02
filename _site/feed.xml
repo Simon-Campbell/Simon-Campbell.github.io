@@ -5,8 +5,8 @@
     <description>a Software Engineering&amp;#039;s blog</description>
     <link>http://imengineer.in/blog/blog/</link>
     <atom:link href="http://imengineer.in/blog/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 Apr 2016 21:24:24 +1300</pubDate>
-    <lastBuildDate>Sat, 02 Apr 2016 21:24:24 +1300</lastBuildDate>
+    <pubDate>Sat, 02 Apr 2016 21:28:47 +1300</pubDate>
+    <lastBuildDate>Sat, 02 Apr 2016 21:28:47 +1300</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -19,54 +19,48 @@
 
 &lt;p&gt;The below example can be modified to fail tests on warnings instead of just errors. This can be done by simply modifying the following line of code in the event handler:&lt;/p&gt;
 
-&lt;pre class=&quot;brush: plain; title: ; notranslate&quot; title=&quot;&quot;&gt;&amp;lt;br /&amp;gt;
-if (e.Severity == XmlSeverityType.Error)&amp;lt;br /&amp;gt;
-&lt;/pre&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Severity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSeverityType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;to be:&lt;/p&gt;
 
-&lt;pre class=&quot;brush: plain; title: ; notranslate&quot; title=&quot;&quot;&gt;&amp;lt;br /&amp;gt;
-if (e.Severity == XmlSeverityType.Error || e.Severity == XmlSeverityType.Warning)&amp;lt;br /&amp;gt;
-&lt;/pre&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Severity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSeverityType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Severity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSeverityType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Warning&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;If you are generating XML output against an XSD you probably should aim to have full compliance against the specification.&lt;/p&gt;
 
-&lt;pre class=&quot;brush: csharp; collapse: true; light: false; title: Example XSD Testing; toolbar: true; notranslate&quot; title=&quot;Example XSD Testing&quot;&gt;&amp;lt;br /&amp;gt;
-using Microsoft.VisualStudio.TestTools.UnitTesting;&amp;lt;br /&amp;gt;
-using System.Xml;&amp;lt;br /&amp;gt;
-using System.Xml.Schema;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;namespace XsdBlogPost&amp;lt;br /&amp;gt;
-{&amp;lt;br /&amp;gt;
-    [TestClass]&amp;lt;br /&amp;gt;
-    public class TestXml&amp;lt;br /&amp;gt;
-    {&amp;lt;br /&amp;gt;
-        [TestMethod]&amp;lt;br /&amp;gt;
-        public void TestXmlMethod()&amp;lt;br /&amp;gt;
-        {&amp;lt;br /&amp;gt;
-            var settings = new XmlReaderSettings();&amp;lt;br /&amp;gt;
-            settings.ValidationType = ValidationType.Schema;&amp;lt;br /&amp;gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;&amp;lt;br /&amp;gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;&amp;lt;br /&amp;gt;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;            using (var xmlSchemaReader = XmlReader.Create(&amp;quot;CustomersOrders.xsd&amp;quot;))&amp;lt;br /&amp;gt;
-            {&amp;lt;br /&amp;gt;
-                var schemaSet = new XmlSchemaSet();&amp;lt;br /&amp;gt;
-                schemaSet.Add(null, xmlSchemaReader);&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;                settings.Schemas = schemaSet;&amp;lt;br /&amp;gt;
-                settings.ValidationEventHandler += (sender, e) =&amp;gt;&amp;lt;br /&amp;gt;
-                {&amp;lt;br /&amp;gt;
-                    if (e.Severity == XmlSeverityType.Error)&amp;lt;br /&amp;gt;
-                    {&amp;lt;br /&amp;gt;
-                        Assert.Fail(&amp;quot;Failed a test due to an XSD error.&amp;quot;);&amp;lt;br /&amp;gt;
-                    }&amp;lt;br /&amp;gt;
-                };&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;                var reader = XmlReader.Create(&amp;quot;CustomersOrders.xml&amp;quot;, settings);&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;                while (reader.Read()) ;&amp;lt;br /&amp;gt;
-            }&amp;lt;br /&amp;gt;
-        }&amp;lt;br /&amp;gt;
-    }&amp;lt;br /&amp;gt;
-}&amp;lt;br /&amp;gt;
-&lt;/pre&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Microsoft.VisualStudio.TestTools.UnitTesting&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Xml.Schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;XsdBlogPost&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestXml&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TestXmlMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;XmlReaderSettings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ValidationType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationFlags&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSchemaValidationFlags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReportValidationWarnings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationFlags&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSchemaValidationFlags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessInlineSchema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationFlags&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSchemaValidationFlags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessSchemaLocation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xmlSchemaReader&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlReader&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CustomersOrders.xsd&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schemaSet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;XmlSchemaSet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;schemaSet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xmlSchemaReader&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schemas&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schemaSet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationEventHandler&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Severity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlSeverityType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Fail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Failed a test due to an XSD error.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;XmlReader&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CustomersOrders.xml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;You can get the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/vstudio/bb675181(v=vs.100).aspx&quot;&gt;CustomersOrder.xsd file from Microsoft&lt;/a&gt; as well as the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/vstudio/bb387025(v=vs.100).aspx&quot;&gt;CustomersOrders.xml file&lt;/a&gt;. Try modifying the XML in CustomersOrder to be invalid based on what the XSD file specifies (e.g. change the tag to ).&lt;/p&gt;
 
