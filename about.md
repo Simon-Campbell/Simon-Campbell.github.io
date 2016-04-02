@@ -14,22 +14,10 @@ Any views expressed on this blog are mine alone, and not the views of my employe
 
 ### On The Web
 
-<div>
-  <ul>
-    <li>
-      <a href="http://nz.linkedin.com/pub/simon-campbell/3a/190/46b">LinkedIn</a>
-    </li>
-    <li>
-      <a href="https://twitter.com/simon2k6">Twitter (@simon2k6)</a>
-    </li>
-    <li>
-      <a href="https://bitbucket.org/sscampbell">BitBucket (sscampbell)</a>
-    </li>
-    <li>
-      <a href="https://github.com/Simon-Campbell/">GitHub (Simon-Campbell)</a>
-    </li>
-  </ul>
-</div>
+* [LinkedIn](http://nz.linkedin.com/pub/simon-campbell/3a/190/46b)
+* [Twitter (simon2k6)](https://twitter.com/simon2k6)
+* [GitHub (Simon-Campbell)](https://github.com/Simon-Campbell)
+* [BitBucket (sscampbell)](https://bitbucket.org/sscampbell)
 
 ### Development Interests
 

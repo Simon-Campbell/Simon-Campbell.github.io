@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Simon Campbell&amp;#039;s blog</title>
-    <description>primarily a software blog</description>
+    <title>Simon Campbell&#39;s blog</title>
+    <description>Primarily a blog about software development</description>
     <link>http://imengineer.in/blog/</link>
     <atom:link href="http://imengineer.in/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 Apr 2016 21:50:22 +1300</pubDate>
-    <lastBuildDate>Sat, 02 Apr 2016 21:50:22 +1300</lastBuildDate>
+    <pubDate>Sun, 03 Apr 2016 09:13:41 +1200</pubDate>
+    <lastBuildDate>Sun, 03 Apr 2016 09:13:41 +1200</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -465,12 +465,11 @@
 
 &lt;p&gt;It would be nice to work on some sort of project to be able to stick on my resumé for when I finish university, a project that would also further my learning in C#, .NET and give me more programming experience in general. That project is a Pawn IDE, simply named “PawnEditor”.&lt;/p&gt;
 
-&lt;p&gt;I’ve also started adding some improvements to &lt;a href=&quot;http://dev.seachimp.com/projects/lva2&quot; title=&quot;LVA&quot;&gt;LVA&lt;/a&gt; (a branch of LW_LVDM), I’m adding the ideas to LVA because LW_LVDM seems to be evolving into something different to what I envisioned. The first update to LVA will be a more friendly UI, those who have stumbled onto &lt;a href=&quot;http://twitter.com/simon2k6&quot; title=&quot;my Twitter page&quot;&gt;my Twitter page&lt;/a&gt; will have seen developments of that a couple of months ago.&lt;/p&gt;
+&lt;p&gt;I’ve also started adding some improvements to &lt;a href=&quot;https://github.com/Simon-Campbell/las-venturas-arena&quot;&gt;LVA&lt;/a&gt; (a branch of LW_LVDM), I’m adding the ideas to LVA because LW_LVDM seems to be evolving into something different to what I envisioned. The first update to LVA will be a more friendly UI, those who have stumbled onto &lt;a href=&quot;http://twitter.com/simon2k6&quot;&gt;my Twitter page&lt;/a&gt; will have seen developments of that a couple of months ago.&lt;/p&gt;
 
 &lt;p&gt;Another thing I’d like to do is read in hopes of improving English literacy skills as I believe mine are starting to slip. Although I have quite a bit of spare time due to holidays, it still feels difficult to whip out an “&lt;em&gt;old-fashione&lt;/em&gt;d” book and start comfortably reading. I am currently attempting to read a novel named &lt;a href=&quot;http://en.wikipedia.org/wiki/Atlas_Shrugged&quot;&gt;Atlas Shrugged&lt;/a&gt; by &lt;a href=&quot;http://en.wikipedia.org/wiki/Ayn_Rand&quot;&gt;Ayn Rand&lt;/a&gt;, which I hope can be finished in good time.&lt;/p&gt;
 
 &lt;p&gt;Finally, it think it would be a good idea to post some Pawn tutorials. I believe that the best way of learning is to teach, therefore if I post up some Pawn tutorials it will also help me clarify and remember programming and Pawn concepts.&lt;/p&gt;
-
 </description>
         <pubDate>Fri, 04 Feb 2011 00:00:00 +1300</pubDate>
         <link>http://imengineer.in/blog/development/jibber%20jabber/2011/02/04/end-of-holidays.html</link>
@@ -513,7 +512,7 @@
     
       <item>
         <title>Almost One Year of Study Down</title>
-        <description>&lt;p&gt;&lt;a href=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/baby-study.png&quot;&gt;&lt;img class=&quot;size-medium wp-image-16 alignleft&quot; alt=&quot;Baby Studying&quot; src=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/baby-study-300x254.png&quot; width=&quot;300&quot; height=&quot;254&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://imengineer.in/blog/assets/img/baby-study.png&quot; alt=&quot;Baby Studying&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The most important recurring schedule at this stage in my life is coming to it’s yearly break. That is my tertiary study. I was thinking about what I’ve learned about tertiary study and the “journey” it took me to get there.&lt;/p&gt;
 
@@ -532,13 +531,13 @@
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;Hold Onto the Job:&lt;/strong&gt;&lt;br /&gt;
 It’s crap but it’s money in the hand. I can keep looking for another job while working but don’t simply drop it without another job to go to.&lt;/li&gt;
-  &lt;li&gt;**Go to University:&lt;br /&gt;
-**The chances of being employed and the amount of doors open to me will increase if I’m qualified. There will also be better doors available to me, doors that I’m interested in and doors that will make me happy.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Go to University:&lt;/strong&gt;&lt;br /&gt;
+The chances of being employed and the amount of doors open to me will increase if I’m qualified. There will also be better doors available to me, doors that I’m interested in and doors that will make me happy.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/waikato-uni-coa.gif&quot;&gt;&lt;img class=&quot;aligncenter size-full wp-image-15&quot; alt=&quot;Waikato University Logo&quot; src=&quot;http://imengineer.in/blog/wp-content/uploads/2013/04/waikato-uni-coa.gif&quot; width=&quot;196&quot; height=&quot;60&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://imengineer.in/blog/assets/img/waikato-uni-coa.gif&quot; alt=&quot;Waikato University Logo&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;I decided I’d study &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://eng.waikato.ac.nz/programmes/software/&quot;&gt;Software Engineering&lt;/a&gt; at the &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://www.waikato.ac.nz/&quot;&gt;University of Waikato&lt;/a&gt;. This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a &lt;a href=&quot;http://web.archive.org/web/20111228044129/http://sa-mp.com/&quot;&gt;San Andreas Multiplayer&lt;/a&gt; server named &lt;em&gt;&lt;a href=&quot;http://web.archive.org/web/20111228044129/http://forum.littlewhiteys.co.uk/&quot;&gt;littlewhitey’s SA:MP Server&lt;/a&gt;&lt;/em&gt; and learning about programming in a language named&lt;a href=&quot;http://web.archive.org/web/20111228044129/http://www.compuphase.com/pawn/&quot;&gt;Pawn&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I decided I’d study &lt;a href=&quot;http://eng.waikato.ac.nz/programmes/software/&quot;&gt;Software Engineering&lt;/a&gt; at the &lt;a href=&quot;http://www.waikato.ac.nz/&quot;&gt;University of Waikato&lt;/a&gt;. This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a &lt;a href=&quot;http://sa-mp.com/&quot;&gt;San Andreas Multiplayer&lt;/a&gt; server named &lt;em&gt;&lt;a href=&quot;http://forum.littlewhiteys.co.uk/&quot;&gt;littlewhitey’s SA:MP Server&lt;/a&gt;&lt;/em&gt; and learning about programming in a language named&lt;a href=&quot;http://www.compuphase.com/pawn/&quot;&gt;Pawn&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The 8 papers that I chose for my first year of study were the following:&lt;/p&gt;
 
@@ -560,7 +559,6 @@ It’s crap but it’s money in the hand. I can keep looking for another job whi
 &lt;p&gt;The time I’ve had at university has allowed me to undertake my interesting perspectives of things. I hope to continue developing that perspective and be able to put it to a good use.&lt;/p&gt;
 
 &lt;p&gt;I’ll also have you know that I recently quit the job at Domino’s Pizza. It was becoming too difficult to study and work at a disrespectful place.  The kicker to this is that I got a call 3 days later to allow me to work at a new store opening in my home town. I’m looking forward to working at my new place of work: time will tell me how it works out.&lt;/p&gt;
-
 </description>
         <pubDate>Sat, 09 Oct 2010 00:00:00 +1300</pubDate>
         <link>http://imengineer.in/blog/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</link>
@@ -587,20 +585,15 @@ It’s crap but it’s money in the hand. I can keep looking for another job whi
     
       <item>
         <title>Avenged Sevenfold – Nightmare (Review)</title>
-        <description>&lt;div&gt;
-  &lt;figure style=&quot;width: 300px;&quot; class=&quot;wp-caption alignright&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;http://upload.wikimedia.org/wikipedia/en/d/df/Avenged_Sevenfold_-_Nightmare.png&quot; width=&quot;300&quot; height=&quot;300&quot; /&gt;&lt;figcaption class=&quot;wp-caption-text&quot;&gt;Avenged Sevenfold &amp;#8211; Nightmare&lt;/figcaption&gt;&lt;/figure&gt; 
-  
-  &lt;p&gt;
-    &lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;A new album by heavy metal band &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Avenged Sevenfold&quot; href=&quot;http://en.wikipedia.org/wiki/Avenged_Sevenfold&quot;&gt;Avenged Sevenfold&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; has been released on the 27th of July. The album is dedicated to their lost drummer and friend; &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;The Rev&quot; href=&quot;http://en.wikipedia.org/wiki/The_Rev&quot;&gt;The Rev&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt;. &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Dream Theatre&quot; href=&quot;http://en.wikipedia.org/wiki/Dream_Theater&quot;&gt;Dream Theatre&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; drummer &lt;/span&gt;&lt;a style=&quot;line-height: 1.714285714; font-size: 1rem;&quot; title=&quot;Mike Portnoy&quot; href=&quot;http://en.wikipedia.org/wiki/Mike_Portnoy&quot;&gt;Mike Portnoy&lt;/a&gt;&lt;span style=&quot;line-height: 1.714285714; font-size: 1rem;&quot;&gt; has assisted the band in completing the album in The Rev’s absence.&lt;/span&gt;
-  &lt;/p&gt;
-&lt;/div&gt;
+        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://upload.wikimedia.org/wikipedia/en/d/df/Avenged_Sevenfold_-_Nightmare.png&quot; alt=&quot;Avenged Sevenfold - Nightmare&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A new album by heavy metal band &lt;a href=&quot;http://en.wikipedia.org/wiki/Avenged_Sevenfold&quot;&gt;Avenged Sevenfold&lt;/a&gt; has been released on the 27th of July. The album is dedicated to their lost drummer and friend; &lt;a href=&quot;http://en.wikipedia.org/wiki/The_Rev&quot;&gt;The Rev&lt;/a&gt;. &lt;a href=&quot;http://en.wikipedia.org/wiki/Dream_Theater&quot;&gt;Dream Theatre&lt;/a&gt; drummer &lt;a href=&quot;http://en.wikipedia.org/wiki/Mike_Portnoy&quot;&gt;Mike Portnoy&lt;/a&gt; has assisted the band in completing the album in The Rev’s absence.&lt;/p&gt;
 
 &lt;p&gt;I’d like to write about a couple of songs from the album. The first being my favourite song from the album &lt;strong&gt;Save Me&lt;/strong&gt;. This song progresses through a variety of different stages. The vocals, guitar and drumming are all very passionately composed together. This song is a 10 minute wonder and it’s just one of those songs I find myself uncontrollably turning on when I crank on the iPod.&lt;/p&gt;
 
-&lt;p&gt;The second song titled &lt;strong&gt;So Far Away&lt;/strong&gt; may well be my second favourite song on the album. This song contains &lt;a href=&quot;http://en.wikipedia.org/wiki/Synyster_Gates&quot; title=&quot;Synyster Gates&quot;&gt;Synyster Gates&lt;/a&gt;‘ (Lead Guitarist) first ever written lyrics. The song is relatively slow compared to the rest of the album. It starts off with only a singer and guitarist playing then finishes on a more epic note with the rest of the band joining in. The lyrics have been very passionately conceived and are straight to the point.&lt;/p&gt;
+&lt;p&gt;The second song titled &lt;strong&gt;So Far Away&lt;/strong&gt; may well be my second favourite song on the album. This song contains &lt;a href=&quot;http://en.wikipedia.org/wiki/Synyster_Gates&quot;&gt;Synyster Gates’&lt;/a&gt; (Lead Guitarist) first ever written lyrics. The song is relatively slow compared to the rest of the album. It starts off with only a singer and guitarist playing then finishes on a more epic note with the rest of the band joining in. The lyrics have been very passionately conceived and are straight to the point.&lt;/p&gt;
 
 &lt;p&gt;The rest of the album is also brilliant and well worth listening to. I realize that this isn’t everyone’s type of music but I think there should at least be something on the album that you find interesting.&lt;/p&gt;
-
 </description>
         <pubDate>Wed, 11 Aug 2010 00:00:00 +1200</pubDate>
         <link>http://imengineer.in/blog/music/2010/08/11/avenged-sevenfold-nightmare-review.html</link>

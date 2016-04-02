@@ -297,6 +297,9 @@ pre {
     .post-title {
       font-size: 36px; } }
 
+.center {
+  text-align: center; }
+
 .post-content {
   margin-bottom: 30px; }
   .post-content h2 {
