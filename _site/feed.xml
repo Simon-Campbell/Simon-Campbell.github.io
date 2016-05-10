@@ -3,11 +3,66 @@
   <channel>
     <title>Simon Campbell&#39;s blog</title>
     <description>Primarily a blog about software development</description>
-    <link>http://imengineer.in/blog/</link>
-    <atom:link href="http://imengineer.in/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Apr 2016 09:19:19 +1200</pubDate>
-    <lastBuildDate>Sun, 03 Apr 2016 09:19:19 +1200</lastBuildDate>
+    <link>http://imengineer.in/</link>
+    <atom:link href="http://imengineer.in/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 10 May 2016 20:43:24 +1200</pubDate>
+    <lastBuildDate>Tue, 10 May 2016 20:43:24 +1200</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Evaluation of LINQ Selects</title>
+        <description>&lt;p&gt;Recently I was writing a Web API that needed to transform some data. Whilst transforming some data from a data store, I opted to write my code structured like the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Example 1
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doublePlusThree&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;What I have done here is broken what could have been a more complex LINQ expression into several smaller ones chained together. Alternatively, and perhaps more commonly this code would have been written as follows:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Example 2
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doublePlusThree&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;In the examples provided the second example may arguably produce easier to read code. This is because as the intermediate operations are quite simple and therefore easier to comprehend. However, there are scenarios when the intermediate operations are more complex and thus are less comprehensible together. In these scenarios you may wish to consider decomposing your expression into smaller intermediate operations.&lt;/p&gt;
+
+&lt;p&gt;During a code review a colleague pulled up the structure of the first example in a code review. He thought that the first example would result in two loop iterations. My understanding was that it &lt;em&gt;should not&lt;/em&gt; result in two loop iterations, and I proceeded to talk about how the expressions were &lt;a href=&quot;https://msdn.microsoft.com/en-nz/library/mt693152.aspx&quot;&gt;lazily evaluated and execution was deferred&lt;/a&gt;. That is, they are not evaluated until required.&lt;/p&gt;
+
+&lt;p&gt;During our discussion I realised that I had never actually tested this behaviour, it was something that was pieced together based on my usage of LINQ and its documentation. I was basing my argument on the idea of what I think the code &lt;em&gt;should&lt;/em&gt; do, not neccesarily what I had observed. In light of this I proposed that I do a little more research into finding concrete evidence. Unfortunately I was unable to find any evidence explicitly outlining what would happen&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;, so I decided to write up &lt;a href=&quot;https://gist.github.com/Simon-Campbell/4edd8644ff552a6e52059fa615c5234a&quot;&gt;some rough tests&lt;/a&gt; to make some assertions about the behaviour.&lt;/p&gt;
+
+&lt;p&gt;What resulted from those tests were concrete evidence of what was expected. That is: if you iterate through an enumerable created by LINQ statements, then the expressions are being evaluated against an item as you move through the enumerable. For example, two chained &lt;code class=&quot;highlighter-rouge&quot;&gt;Select&lt;/code&gt; statements produce the same number of functional operations as two functional operations within one &lt;code class=&quot;highlighter-rouge&quot;&gt;Select&lt;/code&gt; statement.&lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;When you chain together LINQ statements you are actually creating new enumerables with tarted up enumerators. A enumerator is a structure for moving through a sequence of items (enumerating). Each chained LINQ statement builds a &lt;strong&gt;new&lt;/strong&gt; enumerable with an enumerator based off of the chained enumerables enumerator. The operations defined at each stage is essentially pipelined between enumerators &lt;em&gt;as you are moving through the sequence of items.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In summary, the following can be concluded: when you write a &lt;code class=&quot;highlighter-rouge&quot;&gt;Select&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Where&lt;/code&gt; statement you are actually declaring what should happen &lt;em&gt;when the collection is enumerated.&lt;/em&gt; LINQ is smart enough to build enumerators that execute those expressions as you need them to be evaluated. What this means is that you can enumerate only part of the sequence and not absorb the cost, or you can push the structures onto other processors to divide work. It also may provide you with a nicer way of expressing the ideas within your code.&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;I found evidence after I had written this blog post and recalled the appropriate jargon (deferred execution, lazy evaluation) &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;There may be an overhead for composing operations. If this is important to your application then you will need to benchmark. &lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Tue, 10 May 2016 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/development/2016/05/10/evaluation-of-linq-selects.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/2016/05/10/evaluation-of-linq-selects.html</guid>
+        
+        <category>.net</category>
+        
+        <category>c#</category>
+        
+        <category>programming</category>
+        
+        
+        <category>Development</category>
+        
+      </item>
     
       <item>
         <title>Testing XML Against XSD in C#/.NET</title>
@@ -66,8 +121,8 @@
 
 </description>
         <pubDate>Mon, 07 Jul 2014 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</guid>
+        <link>http://imengineer.in/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/2014/07/07/testing-xml-against-xsd-in-c-net.html</guid>
         
         <category>.net</category>
         
@@ -152,8 +207,8 @@
 
 </description>
         <pubDate>Sun, 25 Aug 2013 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/development/honours%20project/2013/08/25/closures-and-lambdas.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/development/honours%20project/2013/08/25/closures-and-lambdas.html</guid>
+        <link>http://imengineer.in/development/honours%20project/2013/08/25/closures-and-lambdas.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/honours%20project/2013/08/25/closures-and-lambdas.html</guid>
         
         <category>.net</category>
         
@@ -188,8 +243,8 @@
 
 </description>
         <pubDate>Wed, 01 May 2013 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/jibber%20jabber/2013/05/01/mcdonalds-theory.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/jibber%20jabber/2013/05/01/mcdonalds-theory.html</guid>
+        <link>http://imengineer.in/jibber%20jabber/2013/05/01/mcdonalds-theory.html</link>
+        <guid isPermaLink="true">http://imengineer.in/jibber%20jabber/2013/05/01/mcdonalds-theory.html</guid>
         
         <category>ideas</category>
         
@@ -280,8 +335,8 @@
 
 </description>
         <pubDate>Fri, 14 Dec 2012 00:00:00 +1300</pubDate>
-        <link>http://imengineer.in/blog/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</guid>
+        <link>http://imengineer.in/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html</guid>
         
         <category>c#</category>
         
@@ -341,8 +396,8 @@
 &lt;p&gt;(Images thanks to Darius of SA:MP)&lt;/p&gt;
 </description>
         <pubDate>Mon, 09 May 2011 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</guid>
+        <link>http://imengineer.in/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html</guid>
         
         <category>birthday</category>
         
@@ -387,8 +442,8 @@
 
 </description>
         <pubDate>Mon, 18 Apr 2011 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/gaming/2011/04/18/perfect-dark-64.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/gaming/2011/04/18/perfect-dark-64.html</guid>
+        <link>http://imengineer.in/gaming/2011/04/18/perfect-dark-64.html</link>
+        <guid isPermaLink="true">http://imengineer.in/gaming/2011/04/18/perfect-dark-64.html</guid>
         
         <category>360</category>
         
@@ -433,8 +488,8 @@
 
 </description>
         <pubDate>Wed, 13 Apr 2011 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/www/2011/04/13/enabling-webgl-in-firefox-4.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/www/2011/04/13/enabling-webgl-in-firefox-4.html</guid>
+        <link>http://imengineer.in/www/2011/04/13/enabling-webgl-in-firefox-4.html</link>
+        <guid isPermaLink="true">http://imengineer.in/www/2011/04/13/enabling-webgl-in-firefox-4.html</guid>
         
         <category>body</category>
         
@@ -472,8 +527,8 @@
 &lt;p&gt;Finally, it think it would be a good idea to post some Pawn tutorials. I believe that the best way of learning is to teach, therefore if I post up some Pawn tutorials it will also help me clarify and remember programming and Pawn concepts.&lt;/p&gt;
 </description>
         <pubDate>Fri, 04 Feb 2011 00:00:00 +1300</pubDate>
-        <link>http://imengineer.in/blog/development/jibber%20jabber/2011/02/04/end-of-holidays.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/development/jibber%20jabber/2011/02/04/end-of-holidays.html</guid>
+        <link>http://imengineer.in/development/jibber%20jabber/2011/02/04/end-of-holidays.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/jibber%20jabber/2011/02/04/end-of-holidays.html</guid>
         
         <category>.net</category>
         
@@ -561,8 +616,8 @@ The chances of being employed and the amount of doors open to me will increase i
 &lt;p&gt;I’ll also have you know that I recently quit the job at Domino’s Pizza. It was becoming too difficult to study and work at a disrespectful place.  The kicker to this is that I got a call 3 days later to allow me to work at a new store opening in my home town. I’m looking forward to working at my new place of work: time will tell me how it works out.&lt;/p&gt;
 </description>
         <pubDate>Sat, 09 Oct 2010 00:00:00 +1300</pubDate>
-        <link>http://imengineer.in/blog/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</guid>
+        <link>http://imengineer.in/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</link>
+        <guid isPermaLink="true">http://imengineer.in/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</guid>
         
         <category>2010</category>
         
@@ -580,39 +635,6 @@ The chances of being employed and the amount of doors open to me will increase i
         
         
         <category>Jibber Jabber</category>
-        
-      </item>
-    
-      <item>
-        <title>Avenged Sevenfold – Nightmare (Review)</title>
-        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;http://upload.wikimedia.org/wikipedia/en/d/df/Avenged_Sevenfold_-_Nightmare.png&quot; alt=&quot;Avenged Sevenfold - Nightmare&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A new album by heavy metal band &lt;a href=&quot;http://en.wikipedia.org/wiki/Avenged_Sevenfold&quot;&gt;Avenged Sevenfold&lt;/a&gt; has been released on the 27th of July. The album is dedicated to their lost drummer and friend; &lt;a href=&quot;http://en.wikipedia.org/wiki/The_Rev&quot;&gt;The Rev&lt;/a&gt;. &lt;a href=&quot;http://en.wikipedia.org/wiki/Dream_Theater&quot;&gt;Dream Theatre&lt;/a&gt; drummer &lt;a href=&quot;http://en.wikipedia.org/wiki/Mike_Portnoy&quot;&gt;Mike Portnoy&lt;/a&gt; has assisted the band in completing the album in The Rev’s absence.&lt;/p&gt;
-
-&lt;p&gt;I’d like to write about a couple of songs from the album. The first being my favourite song from the album &lt;strong&gt;Save Me&lt;/strong&gt;. This song progresses through a variety of different stages. The vocals, guitar and drumming are all very passionately composed together. This song is a 10 minute wonder and it’s just one of those songs I find myself uncontrollably turning on when I crank on the iPod.&lt;/p&gt;
-
-&lt;p&gt;The second song titled &lt;strong&gt;So Far Away&lt;/strong&gt; may well be my second favourite song on the album. This song contains &lt;a href=&quot;http://en.wikipedia.org/wiki/Synyster_Gates&quot;&gt;Synyster Gates’&lt;/a&gt; (Lead Guitarist) first ever written lyrics. The song is relatively slow compared to the rest of the album. It starts off with only a singer and guitarist playing then finishes on a more epic note with the rest of the band joining in. The lyrics have been very passionately conceived and are straight to the point.&lt;/p&gt;
-
-&lt;p&gt;The rest of the album is also brilliant and well worth listening to. I realize that this isn’t everyone’s type of music but I think there should at least be something on the album that you find interesting.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 11 Aug 2010 00:00:00 +1200</pubDate>
-        <link>http://imengineer.in/blog/music/2010/08/11/avenged-sevenfold-nightmare-review.html</link>
-        <guid isPermaLink="true">http://imengineer.in/blog/music/2010/08/11/avenged-sevenfold-nightmare-review.html</guid>
-        
-        <category>album</category>
-        
-        <category>avenged sevenfold</category>
-        
-        <category>heavy metal</category>
-        
-        <category>metal</category>
-        
-        <category>music</category>
-        
-        <category>review</category>
-        
-        
-        <category>Music</category>
         
       </item>
     
