@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Simon Campbell&#39;s blog</title>
-  <meta name="description" content="Primarily a blog about software development">
+  <title>The Case for Releasing Early and Releasing Often</title>
+  <meta name="description" content="Major software systems can be scary to release to the public. One pitfall I have noted during my career is that people can fall into the trap of releasing to...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://imengineer.in/">
+  <link rel="canonical" href="http://imengineer.in/development/2016/05/11/the-case-for-releasing-often.html">
   <link rel="alternate" type="application/rss+xml" title="Simon Campbell's blog" href="http://imengineer.in/feed.xml">
 </head>
 
@@ -54,121 +54,35 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">The Case for Releasing Early and Releasing Often</h1>
+    <p class="post-meta"><time datetime="2016-05-11T21:03:24+12:00" itemprop="datePublished">May 11, 2016</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">Simon Campbell</span></span></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">May 11, 2016</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>Major software systems can be scary to release to the public. One pitfall I have noted during my career is that people can fall into the trap of releasing too much functionality at one time. I think thatLarge releases of functionality generally leads to complex releases and a release process that is not frequently followed, and therefore becomes a process that is not refined.</p>
 
-        <h2>
-          <a class="post-link" href="/development/2016/05/11/the-case-for-releasing-early-releasing-often.html">The Case for Releasing Early and Releasing Often</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 10, 2016</span>
+<p>A larger set of functionality released at once also makes the impact of a failed deployment much greater: rollback becomes more difficult and if rollback occurs, <strong>everything</strong> is rolled back. Contrast this to the scenario of rolling out a single feature: if that fails, then you only have to rollback that feature.</p>
 
-        <h2>
-          <a class="post-link" href="/development/2016/05/10/evaluation-of-linq-selects.html">Evaluation of LINQ Selects</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 7, 2014</span>
+<p>An unrefined process is expensive and potentially misunderstood. The more frequently a release can be done, then the tighter the process to get new functionality out the door can become. Tightening up the release process also makes servicing the application at a future date more accessible to other developers. New developers to the software system can release bug fixes and functionality upgrades without much resistance. This makes maintenance cheaper and also helps to ensure that the knowledge of releasing the software is not tied to a group of <em>system experts</em>. Those who may be considered system experts (e.g. the original developers) are free to add value elsewhere instead of managing releases.</p>
 
-        <h2>
-          <a class="post-link" href="/development/2014/07/07/testing-xml-against-xsd-in-c-net.html">Testing XML Against XSD in C#/.NET</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2013</span>
+<p>If you are considering building a software system, then you should also consider baking modularity into the architecture. Unfortunately, this will likely increase the cost of individual features by some margin. This is due to the software developers needing to create sensible interfaces between modules. However, this cost does provide your business with an opt-out opportunity for further development if the important, released features do not have the expected user uptake. It also provides you with a tighter feedback loop between your business and the software users, where user feedback can help you prioritise the next functionalities to be developed. Further to this, a modular system becomes easier to test: only updated modules need to be released and tested.</p>
 
-        <h2>
-          <a class="post-link" href="/development/honours%20project/2013/08/25/closures-and-lambdas.html">Closures and Lambdas</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 1, 2013</span>
+<p>Where possible, you should strive to release the simplest version of the system you can have. Follow the Release Early, Release Often (RERO)<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> software development philosophy. Larger releases carry higher risk. Any failure in a release will lead to a large amount of stress with potential deadline slipping, and last minute hotfixes with code quality issues.</p>
 
-        <h2>
-          <a class="post-link" href="/jibber%20jabber/2013/05/01/mcdonalds-theory.html">McDonald&#8217;s Theory</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Dec 14, 2012</span>
-
-        <h2>
-          <a class="post-link" href="/development/2012/12/14/unit-testing-gotcha-with-entity-framework.html">Unit Testing Gotcha with Entity Framework</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 9, 2011</span>
-
-        <h2>
-          <a class="post-link" href="/development/gaming/2011/05/09/5-years-what-does-it-mean-will-it-go-on.html">5 Years: What does it mean? Will it go on?</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 18, 2011</span>
-
-        <h2>
-          <a class="post-link" href="/gaming/2011/04/18/perfect-dark-64.html">Perfect Dark 64</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 13, 2011</span>
-
-        <h2>
-          <a class="post-link" href="/www/2011/04/13/enabling-webgl-in-firefox-4.html">Enabling WebGL in Firefox 4</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 4, 2011</span>
-
-        <h2>
-          <a class="post-link" href="/development/jibber%20jabber/2011/02/04/end-of-holidays.html">End of Holidays</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 9, 2010</span>
-
-        <h2>
-          <a class="post-link" href="/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html">Almost One Year of Study Down</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 11, 2010</span>
-
-        <h2>
-          <a class="post-link" href="/music/2010/08/11/avenged-sevenfold-nightmare-review.html">Avenged Sevenfold – Nightmare (Review)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 25, 2010</span>
-
-        <h2>
-          <a class="post-link" href="/www/2010/07/25/google-images-update.html">Google Images Update</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p><a href="http://haacked.com/archive/2011/04/20/release-early-and-often.aspx/">Release Early, Release Often</a> by Phil Haack elaborates on RERO further <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
 </div>
+
+  </div>
+
+</article>
 
       </div>
     </div>
