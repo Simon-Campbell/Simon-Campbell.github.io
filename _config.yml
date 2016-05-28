@@ -6,6 +6,6 @@ email: simon.s.campbell@gmail.com
 baseurl: ""
 twitter_username: simon2k6
 github_username:  Simon-Campbell
-
+future: true
 # Build settings
 markdown: kramdown
