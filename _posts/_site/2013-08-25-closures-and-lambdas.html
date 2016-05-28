@@ -1,0 +1,62 @@
+<p>Over the past year I have been programming heavily in C#. This experience involved working on a few reasonably large projects and has let me get a good feel for lambda expressions and closures.</p>
+
+<p>For those who do not know, a lambda expression is an anonymous function. Closures are functions where <span style="line-height: 1.714285714; font-size: 1rem;">variables not defined in the function parameter-list but accessible in the environment where the function is defined. Lambda expressions in C# obviously define lambdas, but can also define closures. In saying this, it is important to note that <strong>closures are not lambdas.</strong></span></p>
+
+<p>Prior to using lambda expressions in C# I had spent most of my time programming in Java and Pawn. Neither of these languages support lambda expressions and now when I write code in these languages it hurts. Trying to recreate the simplicity that lambdas provide is impossible and in Java there is a lot of noise in defining reusable functions. Reusable functions in Java are usually defined as Functors. The difference is made apparent in my Honours Project where it is necessary write code like this:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">VoiceMethodFactory</span> <span class="o">{</span>
+    <span class="c1">// VoiceMethodMap just works like any other map, I extract a 'VoiceMethod' based</span>
+    <span class="c1">// on a string key (based on users speech-to-text) and execute it.</span>
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">VoiceMethod</span><span class="o">&gt;</span> <span class="n">voiceMethods</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethodMap</span><span class="o">();</span>
+
+    <span class="kd">private</span> <span class="n">VoiceMethod</span> <span class="n">sayUserLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethod</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">assistant</span><span class="o">.</span><span class="na">sayCurrentLocation</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">private</span> <span class="n">VoiceMethod</span> <span class="n">stopNavigating</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VoiceMethod</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">assistant</span><span class="o">.</span><span class="na">navigateTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">private</span> <span class="n">VoiceMethodFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">voiceMethods</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"where am I"</span><span class="o">,</span> <span class="n">sayUserLocation</span><span class="o">);</span>
+        <span class="n">voiceMethods</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"stop navigating"</span><span class="o">,</span> <span class="n">stopNavigating</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">VoiceMethodFactory</span> <span class="n">createStandardFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">VoiceMethodFactory</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Defines function that can be used to invoke voice methods (defined in another file)
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">VoiceMethod</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="n">invoke</span><span class="o">(</span><span class="n">BlindAssistant</span> <span class="n">assistant</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">arguments</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>This method of doing things required that I define an additional interface and also define classes which implement it and provide the behaviour necessary. These additional classes contain a lot of boilerplate code and (usually) one out of five lines defines the difference. If this setup was defined in a language which supported lambdas, such as C# then I would be writing something like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">VoiceMethodFactory</span> <span class="p">{</span>
+    <span class="c1">// Map changes to a Dictionary in C#
+</span>    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">BlindAssistant</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;&gt;</span> <span class="n">voiceMethods</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">VoiceMethodMap</span><span class="p">();</span>
+
+    <span class="k">private</span> <span class="nf">VoiceMethodFactory</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">voiceMethods</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s">"where am I"</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="nf">sayCurrentLocation</span><span class="p">());</span>
+        <span class="n">voiceMethods</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s">"stop navigating"</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="nf">navigateTo</span><span class="p">(</span><span class="k">null</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="n">VoiceMethodFactory</span> <span class="nf">createStandardFactory</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">VoiceMethodFactory</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This is a lot simpler. In terms of line count (without comments) the C# example is 40% smaller than the Java example. I imagine the difference is much greater in my current code base which defines several more of these <code class="highlighter-rouge">VoiceMethod</code>s. Using lambdas is much more concise and to the point and I could now even argue that my original reasons for the <code class="highlighter-rouge">VoiceMethodFactory</code> are now void. The reason I created the factory was to move this anonymous class definition noise away from another part of my system.</p>
+
+<p>Java 8 is going to <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html" title="Java 8 - Lambda Expressions">support lambdas and closures as part of Project Lambda</a>. It is unfortunate however that Android developers may not get to use lambda expressions in their Java code for a little while yet. This is because Android does not use the official Java implementation. Instead Android uses Apache Harmony, an open-source implementation of Java, due to <a href="http://stackoverflow.com/questions/16921337/why-apache-harmony-or-how-to-use-java-8-on-android" title="Why Apache Harmony on Android">licensing issues</a> between Sun and Google.</p>
+
