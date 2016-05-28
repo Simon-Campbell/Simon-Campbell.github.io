@@ -1,0 +1,53 @@
+<p>In some software systems you are required to generate generate some XML output. Usually this XML output can be generated as a result of some serialising objects. The specification of the XML structure can either be very straightforward or complex for the inexperienced C#/.NET developer to implement. The straightforward specifications usually only require serializing some Plain Old CLR Object (POCO) whereas the other, more complex specifications may require additional C# class/field attributes or some custom serialisation layer. Either case should be tested because even the simplest serialization procedures can produce unexpected outputs.</p>
+
+<p>If you are fortunate enough to have have XSD contract for how your XML should look then you can use the .NET framework to validate your XML documents against XSD. In order to get started with testing your outputs against an XSD you will need to create a Unit Test project in Visual Studio with a reference to System.Xml. Once you have created the project add a new unit test to the project with <code class="highlighter-rouge">using</code> statements for System.Xml and System.Xml.Schema.</p>
+
+<p>In C#/.NET you can read an XML file using the <a href="http://msdn.microsoft.com/en-us/library/system.xml.xmlreader(v=vs.110).aspx">XmlReader</a> class. This class can be used to read XML files from a stream or a URI string using the XmlReader.Create method. One of the optional overloads for this method is to take an <a href="http://msdn.microsoft.com/en-us/library/system.xml.xmlreadersettings(v=vs.110).aspx">XmlReaderSettings</a> instance. An XmlReaderSettings class allows for a validation type, validation options, validation schemas and an event handler to be set when any important validation events happen. This class is what will be used as the basis for testing XML against XSD. At the bottom of this post is an example of how the XmlReader class can be put to use.</p>
+
+<p>The below example can be modified to fail tests on warnings instead of just errors. This can be done by simply modifying the following line of code in the event handler:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Severity</span> <span class="p">==</span> <span class="n">XmlSeverityType</span><span class="p">.</span><span class="n">Error</span><span class="p">)</span></code></pre></figure>
+
+<p>to be:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Severity</span> <span class="p">==</span> <span class="n">XmlSeverityType</span><span class="p">.</span><span class="n">Error</span> <span class="p">||</span> <span class="n">e</span><span class="p">.</span><span class="n">Severity</span> <span class="p">==</span> <span class="n">XmlSeverityType</span><span class="p">.</span><span class="n">Warning</span><span class="p">)</span></code></pre></figure>
+
+<p>If you are generating XML output against an XSD you probably should aim to have full compliance against the specification.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">using</span> <span class="nn">Microsoft.VisualStudio.TestTools.UnitTesting</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Xml</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Xml.Schema</span><span class="p">;</span>
+<span class="k">namespace</span> <span class="nn">XsdBlogPost</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">TestClass</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">TestXml</span>
+    <span class="p">{</span>
+        <span class="p">[</span><span class="n">TestMethod</span><span class="p">]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">TestXmlMethod</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlReaderSettings</span><span class="p">();</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">ValidationType</span> <span class="p">=</span> <span class="n">ValidationType</span><span class="p">.</span><span class="n">Schema</span><span class="p">;</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">ValidationFlags</span> <span class="p">|=</span> <span class="n">XmlSchemaValidationFlags</span><span class="p">.</span><span class="n">ReportValidationWarnings</span><span class="p">;</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">ValidationFlags</span> <span class="p">|=</span> <span class="n">XmlSchemaValidationFlags</span><span class="p">.</span><span class="n">ProcessInlineSchema</span><span class="p">;</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">ValidationFlags</span> <span class="p">|=</span> <span class="n">XmlSchemaValidationFlags</span><span class="p">.</span><span class="n">ProcessSchemaLocation</span><span class="p">;</span>
+            <span class="k">using</span> <span class="p">(</span><span class="n">var</span> <span class="n">xmlSchemaReader</span> <span class="p">=</span> <span class="n">XmlReader</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">"CustomersOrders.xsd"</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">var</span> <span class="n">schemaSet</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSchemaSet</span><span class="p">();</span>
+                <span class="n">schemaSet</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="n">xmlSchemaReader</span><span class="p">);</span>
+                <span class="n">settings</span><span class="p">.</span><span class="n">Schemas</span> <span class="p">=</span> <span class="n">schemaSet</span><span class="p">;</span>
+                <span class="n">settings</span><span class="p">.</span><span class="n">ValidationEventHandler</span> <span class="p">+=</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Severity</span> <span class="p">==</span> <span class="n">XmlSeverityType</span><span class="p">.</span><span class="n">Error</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">Assert</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="s">"Failed a test due to an XSD error."</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">};</span>
+                <span class="n">var</span> <span class="n">reader</span> <span class="p">=</span> <span class="n">XmlReader</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">"CustomersOrders.xml"</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="nf">Read</span><span class="p">())</span> <span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You can get the <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb675181(v=vs.100).aspx">CustomersOrder.xsd file from Microsoft</a> as well as the <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb387025(v=vs.100).aspx">CustomersOrders.xml file</a>. Try modifying the XML in CustomersOrder to be invalid based on what the XSD file specifies (e.g. change the tag to ).</p>
+

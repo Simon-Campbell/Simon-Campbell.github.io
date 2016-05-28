@@ -5,9 +5,53 @@
     <description>Primarily a blog about software development</description>
     <link>http://imengineer.in/</link>
     <atom:link href="http://imengineer.in/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 10 May 2016 21:03:43 +1200</pubDate>
-    <lastBuildDate>Tue, 10 May 2016 21:03:43 +1200</lastBuildDate>
+    <pubDate>Sun, 29 May 2016 10:46:10 +1200</pubDate>
+    <lastBuildDate>Sun, 29 May 2016 10:46:10 +1200</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>The Case for Releasing Early and Releasing Often</title>
+        <description>&lt;p&gt;Major software systems can be intimidating to release to the public, perhaps due to the potentially complex nature of a software release. One pitfall I have noted during my career is that people can fall into the trap of releasing too much functionality at one time. Larger releases of software generally leads to a complex release and a release process that is not frequently followed. This release process is generally not refined due to the infrequency of it being followed. In order to counteract that I recommend the the Release Early, Release Often (RERO)&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; software development philosophy.&lt;/p&gt;
+
+&lt;p&gt;A larger set of functionality released at once makes the impact of a failed deployment much greater: rollback becomes more difficult and if rollback has to occur, then it is likely &lt;strong&gt;everything&lt;/strong&gt; is rolled back &lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;. Contrast this to the scenario of rolling out a single feature: if that fails, then you only have to rollback that feature. The impact of having to roll back several features is less than that of rolling back several.&lt;/p&gt;
+
+&lt;p&gt;An unrefined software release process is expensive and potentially misunderstood. The more frequently a release can be done, then the tighter a release process can become. Tightening up the release process with each release also makes servicing the application at a future date more accessible to other developers. New developers can release bug fixes and functionality upgrades with less resistance. This makes maintenance cheaper and also helps to ensure that the knowledge of releasing the software is not tied to a group of &lt;em&gt;system experts&lt;/em&gt; (e.g. original developers). Decoupling system experts from the release means they are free to add value elsewhere instead of managing releases. In the scenario that they leave &lt;sup id=&quot;fnref:3&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt;, then they are taking less tacit knowledge with them.&lt;/p&gt;
+
+&lt;p&gt;If you are considering building a software system, then you should also consider baking modularity into the architecture. It is likely that this will likely increase the cost of individual features by some margin due to the software developers needing to create sensible interfaces between modules. This cost will enable RERO and with that, will enable a tighter feedback loop between your business and the software users. Enabling feedback earlier can help prioritise the next functionalities to be developed. Further to this, a modular system becomes easier to test: only updated modules need to be released and tested. Also consider RERO as a way to enable market testing, instead of developing a full feature set and releasing with a “big bang” approach, your business has been given an opt-out opportunity. Further development can be ceased&lt;sup id=&quot;fnref:4&quot;&gt;&lt;a href=&quot;#fn:4&quot; class=&quot;footnote&quot;&gt;4&lt;/a&gt;&lt;/sup&gt; if the important features are released earlier and do not have the expected user uptake.&lt;/p&gt;
+
+&lt;p&gt;Where possible, you should strive to release the simplest version of a software system you can have. Follow the RERO philosophy. Larger releases carry higher risk and higher stresses. Any failure in a release has a higher potential loss.  A failed release may also carry deadline slippage with it: a second, complex release will be carried out along with a higher testing effort (due to change complexity). Any last minute code fixes introduced in a re-release may also be of questionable quality due to being implemented under stressful conditions.&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;&lt;a href=&quot;http://haacked.com/archive/2011/04/20/release-early-and-often.aspx/&quot;&gt;Release Early, Release Often&lt;/a&gt; by Phil Haack elaborates on RERO further &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;There may be some cowboy that will be able to get you to production. I hope that cowboy does not do some magical, undocumented hack which haunts the next software release &lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot;&gt;
+      &lt;p&gt;Why would they do that!? Employing a philosophy like RERO is sure to improve morale and keep your developers around &lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:4&quot;&gt;
+      &lt;p&gt;Be vigilant with your decision and ensure that you are not blinded by the &lt;a href=&quot;http://dictionary.cambridge.org/dictionary/english/sunk-cost-fallacy&quot;&gt;sunk cost fallacy&lt;/a&gt; &lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sun, 29 May 2016 00:00:00 +1200</pubDate>
+        <link>http://imengineer.in/development/2016/05/29/the-case-for-releasing-early-releasing-often.html</link>
+        <guid isPermaLink="true">http://imengineer.in/development/2016/05/29/the-case-for-releasing-early-releasing-often.html</guid>
+        
+        <category>programming</category>
+        
+        <category>releasing</category>
+        
+        <category>agile</category>
+        
+        
+        <category>Development</category>
+        
+      </item>
     
       <item>
         <title>Evaluation of LINQ Selects</title>
@@ -560,79 +604,6 @@
         
         
         <category>Development</category>
-        
-        <category>Jibber Jabber</category>
-        
-      </item>
-    
-      <item>
-        <title>Almost One Year of Study Down</title>
-        <description>&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;/assets/img/baby-study.png&quot; alt=&quot;Baby Studying&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The most important recurring schedule at this stage in my life is coming to it’s yearly break. That is my tertiary study. I was thinking about what I’ve learned about tertiary study and the “journey” it took me to get there.&lt;/p&gt;
-
-&lt;p&gt;I’ve always wanted to go to university for something, as a child it just looked like such an achievement to be able to do so. I stuck through till the end of my secondary education even if admittedly it was a very lazy last year. I done this so even if I didn’t feel like studying, I’d still have the option to someday when I decided to &lt;em&gt;grow up.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Well, my secondary education had come to an end and I hadn’t signed up to go to any university. The application process seemed daunting — there were loans, commitments, more study and general confusion about university applications to top it off. I couldn’t motivate myself to do all this while struggling to study for my end of year exams. &lt;em&gt;I wasn’t ready.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;I decided I’d continue working at my current job (a Domino’s Pizza store). I asked my boss if I could become a full time worker and work 40 hours per week, however he stated that he would only be able to give me 30 to 35 hours per week. This seemed reasonable as there were limited hours to be shared at the time. In light of this information I accepted the offer and hoped that if someone were to leave then my hours would be bumped up, it seemed like the logical thing any loyal employer would do.&lt;/p&gt;
-
-&lt;p&gt;Over the next year there were several people who left the job or transferred to another store meaning that more hours had become available. As a worker being loyal to his employer I was hoping that I’d get loyalty in return, however that wasn’t the case. I didn’t get the extra hours I had hoped for, I had actually started to lose hours so the replacements could get more hours.&lt;/p&gt;
-
-&lt;p&gt;There wasn’t much I could do once I realised I wasn’t being valued as a worker, a human-being and was being disrespected. It seemed I was rather thought of as a tool to make money and not a person. The worst part of the recession was upon me — I couldn’t find a new job which meant I was stuck working there.&lt;/p&gt;
-
-&lt;p&gt;My income was not steady enough to move out from home and push my life ahead. I then made myself a basic plan to push my life ahead:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Hold Onto the Job:&lt;/strong&gt;&lt;br /&gt;
-It’s crap but it’s money in the hand. I can keep looking for another job while working but don’t simply drop it without another job to go to.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Go to University:&lt;/strong&gt;&lt;br /&gt;
-The chances of being employed and the amount of doors open to me will increase if I’m qualified. There will also be better doors available to me, doors that I’m interested in and doors that will make me happy.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p class=&quot;center&quot;&gt;&lt;img src=&quot;/assets/img/waikato-uni-coa.gif&quot; alt=&quot;Waikato University Logo&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;I decided I’d study &lt;a href=&quot;http://eng.waikato.ac.nz/programmes/software/&quot;&gt;Software Engineering&lt;/a&gt; at the &lt;a href=&quot;http://www.waikato.ac.nz/&quot;&gt;University of Waikato&lt;/a&gt;. This subject choice was a relatively simple choice to make, during my gap year I had enjoyed my time scripting for a &lt;a href=&quot;http://sa-mp.com/&quot;&gt;San Andreas Multiplayer&lt;/a&gt; server named &lt;em&gt;&lt;a href=&quot;http://forum.littlewhiteys.co.uk/&quot;&gt;littlewhitey’s SA:MP Server&lt;/a&gt;&lt;/em&gt; and learning about programming in a language named&lt;a href=&quot;http://www.compuphase.com/pawn/&quot;&gt;Pawn&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The 8 papers that I chose for my first year of study were the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;ENEL111-10A:&lt;/strong&gt; Introduction to Electronics&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;COMP103-10A:&lt;/strong&gt; Introduction to Computer Science 1&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;STAT121-10A:&lt;/strong&gt; Introduction to Statistical Methods&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ENGG180-10A:&lt;/strong&gt; Fundamentals of Engineering&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ENMP102-10B:&lt;/strong&gt; Materials and Process Engineering&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;MATH101-10B:&lt;/strong&gt; Introduction to Calculus&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;MATH102-10B:&lt;/strong&gt; Introduction to Algebra&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;COMP104-10B:&lt;/strong&gt; Introduction to Computer Science 2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;After taking action I had to wait until 2010. The year I started my tertiary study and put my life on a better path. I haven’t regretted my decision to take this action, it has presented some difficult hurdles but not anything that cannot be overcome.&lt;/p&gt;
-
-&lt;p&gt;In the next week I will complete my last week of my first year of this exciting journey. The last week of teaching will then be followed by a 3 week exam period which will require me to knuckle down (damn calculus) so I get a 100% pass rate.&lt;/p&gt;
-
-&lt;p&gt;The time I’ve had at university has allowed me to undertake my interesting perspectives of things. I hope to continue developing that perspective and be able to put it to a good use.&lt;/p&gt;
-
-&lt;p&gt;I’ll also have you know that I recently quit the job at Domino’s Pizza. It was becoming too difficult to study and work at a disrespectful place.  The kicker to this is that I got a call 3 days later to allow me to work at a new store opening in my home town. I’m looking forward to working at my new place of work: time will tell me how it works out.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 09 Oct 2010 00:00:00 +1300</pubDate>
-        <link>http://imengineer.in/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</link>
-        <guid isPermaLink="true">http://imengineer.in/jibber%20jabber/2010/10/09/almost-one-year-of-study-down.html</guid>
-        
-        <category>2010</category>
-        
-        <category>bored</category>
-        
-        <category>personal</category>
-        
-        <category>programming</category>
-        
-        <category>rambling</category>
-        
-        <category>university</category>
-        
-        <category>work</category>
-        
         
         <category>Jibber Jabber</category>
         

@@ -1,0 +1,70 @@
+<p>I have been working with the <a href="https://www.google.co.nz/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDUQFjAA&amp;url=http%3A%2F%2Fmsdn.microsoft.com%2Fen-us%2Fdata%2Fef.aspx&amp;ei=8CnMUP7nMa2jiAeC-oHYDA&amp;usg=AFQjCNGnRYM3tghOlk7YE3qY8RyjXpulaQ&amp;sig2=KnR4_5pyp6HCgG6AyjsqNg&amp;bvm=bv.1355325884,d.aGc">Entity Framework</a> at work. It has been used to connect with a database for a RESTful <a href="http://www.asp.net/web-api">ASP.Net Web API</a> service.</p>
+
+<p>Testing the Web API has been interesting to learn about. Originally I decided to test this Web API using <a href="http://www.fiddler2.com/fiddler2/">Fiddler</a> to do HTTP POSTs to selected URLs and then analyzing the results. It soon became apparent that this method was slow and error prone– making me opt for unit-testing.</p>
+
+<p>I spent a good portion of the day writing the tests, fixing bugs as I found them. Fortunately, the API scope of the API was relatively small and writing most of the tests did not take too long. That is, until I encountered a weird side effect of the C# Entity Framework.</p>
+
+<p>One of the API method tests that made a POST required the use of a database ObjectContextobject to check if the request actually updated the database entities that it should have. The test however was failing, I believe this was due a ObjectContext being created in the unit-test method and another being created in the method being tested. The two differentObjectContexts were out of sync even though they were attached to the same datastore.</p>
+
+<p>The structure of the code that caused the problem was similar to this piece of skeleton code:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">class</span> <span class="nc">TestClass</span>
+<span class="p">{</span>
+    <span class="n">ObjectContext</span> <span class="n">db</span><span class="p">;</span>
+
+    <span class="p">[</span><span class="n">TestInitialize</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Setup</span><span class="p">()</span>
+    <span class="p">{</span>
+       <span class="n">db</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectContextEntities</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="p">[</span><span class="n">TestCleanup</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Cleanup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="p">[</span><span class="n">TestMethod</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">TestPost</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// Add a new Entity to the Entities table,
+</span>        <span class="c1">// with a TimeOut of null.
+</span>        <span class="n">Entity</span> <span class="n">e</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Entity</span><span class="p">();</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">TimeIn</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+        <span class="n">e</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">AddToEntities</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+
+        <span class="c1">// Call a method which updates TimeOut for all entities to
+</span>        <span class="c1">// DateTime.Now
+</span>        <span class="k">new</span> <span class="nf">PostingController</span><span class="p">().</span><span class="nf">Post</span><span class="p">();</span>
+
+        <span class="c1">// TimeOut for each row in Entities should have been changed
+</span>        <span class="c1">// from NULL to not now
+</span>        <span class="n">var</span> <span class="n">q</span> <span class="p">=</span> <span class="n">from</span> <span class="n">q</span> <span class="k">in</span> <span class="n">db</span><span class="p">.</span><span class="n">Entities</span> <span class="n">select</span> <span class="n">e</span><span class="p">;</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">r</span> <span class="k">in</span> <span class="n">q</span><span class="p">)</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="nf">IsTrue</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">!=</span> <span class="k">null</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">PostingController</span><span class="p">()</span> <span class="c1">// Class under test
+</span><span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">db</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectContextEntities</span><span class="p">();</span>
+        <span class="n">var</span> <span class="n">q</span> <span class="p">=</span> <span class="n">from</span> <span class="n">e</span> <span class="k">in</span> <span class="n">db</span><span class="p">.</span><span class="n">Entity</span> <span class="n">select</span> <span class="n">e</span><span class="p">;</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">r</span> <span class="k">in</span> <span class="n">q</span><span class="p">)</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">TimeOut</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+
+        <span class="n">db</span><span class="p">.</span><span class="nf">SaveChanges</span><span class="p">();</span>
+        <span class="n">db</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>It appears that the Entity Framework tries to be “smart” and efficient which means that the update is not synchronized between the ObjectContexts. In order to work around this I was required to call the Refresh() method on the ObjectContext after the call to Post(), like so:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">db</span><span class="p">.</span><span class="nf">Refresh</span><span class="p">(</span><span class="n">RefreshMode</span><span class="p">.</span><span class="n">StoreWins</span><span class="p">,</span> <span class="n">db</span><span class="p">.</span><span class="n">Entities</span><span class="p">);</span></code></pre></figure>
+
+<p>I am not sure if this is the recommended way to work around this but it works and the test will pass as you expect. I will look into this more when I get back to the code at work. I will post any new findings or corrections.</p>
+
