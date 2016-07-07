@@ -9,7 +9,7 @@ tags:
   - releasing
   - agile
 ---
-Major software systems can be intimidating to release to the public, perhaps due to the potentially complex nature of a software release. One pitfall I have noted during my career is that people can fall into the trap of releasing too much functionality at one time. Larger releases of software generally leads to a complex release and a release process that is not frequently followed. This release process is generally not refined due to the infrequency of it being followed. In order to counteract that I recommend the the Release Early, Release Often (RERO)[^1] software development philosophy.
+Major software systems can be intimidating to release to the public, perhaps due to the potentially complex nature of a software release. One pitfall I have noted during my career is that people can fall into the trap of releasing too much functionality at one time. Larger releases of software generally leads to a complex release and a release process that is not frequently followed. This release process is generally not refined due to the infrequency of it being followed. In order to counteract that I recommend the Release Early, Release Often (RERO)[^1] software development philosophy.
 
 A larger set of functionality released at once makes the impact of a failed deployment much greater: rollback becomes more difficult and if rollback has to occur, then it is likely **everything** is rolled back [^2]. Contrast this to the scenario of rolling out a single feature: if that fails, then you only have to rollback that feature. The impact of having to roll back several features is less than that of rolling back several.
 
